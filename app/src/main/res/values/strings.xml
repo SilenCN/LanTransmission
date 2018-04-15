@@ -14,4 +14,10 @@
     <string name="nav_header_share">分享</string>
     <string name="nav_header_about">关于</string>
     <string name="nav_header_group_other">其他</string>
+    <string name="fab_title">共享</string>
+    <string name="fab_file">文件</string>
+    <string name="fab_text">文字</string>
+    <string name="fab_video">视频</string>
+    <string name="fab_image">图片</string>
+    <string name="fab_clipboard">粘贴板</string>
 </resources>

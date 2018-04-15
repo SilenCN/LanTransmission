@@ -66,24 +66,44 @@
         fab:menu_labels_position="left"
         fab:menu_openDirection="up"
         fab:menu_backgroundColor="@android:color/transparent"
-        fab:menu_fab_label="your_label_here">
+        fab:menu_fab_label="@string/fab_title">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_item"
+            android:id="@+id/fab_item_file"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
             fab:fab_size="mini"
-            fab:fab_label="Menu item 1" />
+            fab:fab_label="@string/fab_file" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_size="mini"
+            fab:fab_label="@string/fab_text" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_item_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_size="mini"
+            fab:fab_label="@string/fab_video" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_item_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_size="mini"
+            fab:fab_label="@string/fab_image" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_item_clipboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_size="mini"
+            fab:fab_label="@string/fab_clipboard" />
 
     </com.github.clans.fab.FloatingActionMenu>
-    <!--
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_menu_share" />
--->
+
 </android.support.design.widget.CoordinatorLayout>
