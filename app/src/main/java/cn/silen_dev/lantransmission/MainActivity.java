@@ -1,6 +1,8 @@
 package cn.silen_dev.lantransmission;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -12,9 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
+
+import cn.silen_dev.lantransmission.widget.RandomTextView.RandomTextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    RandomTextView randomTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +39,36 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        randomTextView=findViewById(R.id.random_textview);
+        randomTextView.setOnRippleViewClickListener(new RandomTextView.OnRippleViewClickListener() {
+            @Override
+            public void onRippleViewClicked(View view) {
+                System.out.println(((TextView)view).getText());
+            }
+        });
+
+        //startActivity(new Intent().setClass(this,TestActivity.class));
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                randomTextView.addKeyWord("彭丽媛1");
+                randomTextView.addKeyWord("习近平2");
+                randomTextView.addKeyWord("彭丽媛3");
+                randomTextView.addKeyWord("习近平4");
+                randomTextView.addKeyWord("彭丽媛5");
+                randomTextView.addKeyWord("习近平6");
+                randomTextView.addKeyWord("彭丽媛7");
+                randomTextView.addKeyWord("习近平8");
+                randomTextView.addKeyWord("彭丽媛9");
+                randomTextView.addKeyWord("习近平0");
+                randomTextView.show();
+            }
+        }, 2 * 1000);
+
+
     }
 
     @Override
