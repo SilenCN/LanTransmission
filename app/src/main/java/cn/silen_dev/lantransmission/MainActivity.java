@@ -55,16 +55,16 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run()
             {
-                randomTextView.addKeyWord("彭丽媛1");
-                randomTextView.addKeyWord("习近平2");
-                randomTextView.addKeyWord("彭丽媛3");
-                randomTextView.addKeyWord("习近平4");
-                randomTextView.addKeyWord("彭丽媛5");
-                randomTextView.addKeyWord("习近平6");
+                randomTextView.addKeyWord("肖丁剑");
+                randomTextView.addKeyWord("李新宇");
+                randomTextView.addKeyWord("彭艳秋");
+                randomTextView.addKeyWord("杨志坤");
+                randomTextView.addKeyWord("韩婷婷");
+                /*randomTextView.addKeyWord("习近平6");
                 randomTextView.addKeyWord("彭丽媛7");
                 randomTextView.addKeyWord("习近平8");
                 randomTextView.addKeyWord("彭丽媛9");
-                randomTextView.addKeyWord("习近平0");
+                randomTextView.addKeyWord("习近平0");*/
                 randomTextView.show();
             }
         }, 2 * 1000);
