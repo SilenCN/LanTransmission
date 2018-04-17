@@ -7,4 +7,12 @@ public class ConstValue {
     public static final String EXIT="exit";
     public static final String TRANSMISSION="transmission";
     public static final String GET_FILE="get";
+    public static final String APP="app";
+
+    public static final int TRANSMISSION_FILE=0;
+    public static final int TRANSMISSION_IMAGE=1;
+    public static final int TRANSMISSION_VIDEO=2;
+    public static final int TRANSMISSION_TEXT=3;
+    public static final int TRANSMISSION_CLIPBOARD=4;
+
 }

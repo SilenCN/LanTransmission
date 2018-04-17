@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
+import cn.silen_dev.lantransmission.settings.SettingActivity;
 import cn.silen_dev.lantransmission.widget.RandomTextView.RandomTextView;
 
 public class MainActivity extends AppCompatActivity
@@ -109,7 +110,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id){
-
+            case R.id.nav_settings:
+                startActivity(new Intent(this, SettingActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
