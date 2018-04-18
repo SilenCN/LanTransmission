@@ -1,5 +1,5 @@
 package cn.silen_dev.lantransmission;
-
+import cn.silen_dev.lantransmission.dialog.*;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     RandomTextView randomTextView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +68,12 @@ public class MainActivity extends AppCompatActivity
             }
         }, 2 * 1000);
 
-
+       /*InputWordDialog inputWordDialog=new InputWordDialog();
+        inputWordDialog.show(getSupportFragmentManager(),null);*/
+       /*LinkDialog linkDialog=new LinkDialog();
+       linkDialog.show(getSupportFragmentManager(),null);*/
+       LinkOtherEquipmentDialog linkOtherEquipmentDialog=new LinkOtherEquipmentDialog();
+       linkOtherEquipmentDialog.show(getSupportFragmentManager(),null);
     }
 
     @Override

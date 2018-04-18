@@ -8,10 +8,10 @@
 
     <TextView
         android:id="@+id/thisphoneinfo"
-        android:layout_width="71dp"
+        android:layout_width="144dp"
         android:layout_height="38dp"
-        android:text="本机信息"
         android:gravity="center"
+        android:text="本机信息"
         tools:layout_editor_absoluteX="56dp"
         tools:layout_editor_absoluteY="155dp" />
     <LinearLayout
