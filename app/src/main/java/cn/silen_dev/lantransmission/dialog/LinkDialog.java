@@ -27,10 +27,11 @@ public class LinkDialog extends DialogFragment {
          super.onCreateDialog(savedInstanceState);
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
         builder.setTitle("设备连接");
-        View view= LayoutInflater.from(getActivity()).inflate(R.layout.activity_test,null);
+        View view= LayoutInflater.from(getActivity()).inflate(R.layout.link_dialog,null);
+        //布局控件等的安排
+
 
         builder.setView(view);
-
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
