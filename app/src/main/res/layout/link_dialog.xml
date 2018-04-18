@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/thisphoneinfo"
+        android:layout_width="71dp"
+        android:layout_height="38dp"
+        android:text="本机信息"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="56dp"
+        tools:layout_editor_absoluteY="155dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lab_ipaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本机IP地址"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="56dp"
+            tools:layout_editor_absoluteY="219dp"
+            android:layout_weight="3"/>
+
+
+        <TextView
+        android:id="@+id/ipaddressinfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="127.0.0.1"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="56dp"
+        tools:layout_editor_absoluteY="259dp"
+            android:layout_weight="7"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lab_host"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="端口信息"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="56dp"
+            tools:layout_editor_absoluteY="297dp" />
+
+        <TextView
+            android:id="@+id/hostinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="150dp"
+            tools:layout_editor_absoluteY="219dp"
+            android:layout_weight="7"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lab_web"
+            android:layout_width="94dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="网络地址"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="150dp"
+            tools:layout_editor_absoluteY="259dp" />
+
+        <TextView
+        android:id="@+id/webinfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WWW.111111.com"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="297dp"
+            android:layout_weight="7"/>
+    </LinearLayout>
+
+</LinearLayout>

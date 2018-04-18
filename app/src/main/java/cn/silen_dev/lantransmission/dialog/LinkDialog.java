@@ -1,4 +1,4 @@
-package cn.silen_dev.lantransmission;
+package cn.silen_dev.lantransmission.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import cn.silen_dev.lantransmission.R;
 import cn.silen_dev.lantransmission.model.Equipment;
 
 /**
@@ -29,7 +30,9 @@ public class LinkDialog extends DialogFragment {
         builder.setTitle("设备连接");
         View view= LayoutInflater.from(getActivity()).inflate(R.layout.link_dialog,null);
         //布局控件等的安排
-
+        String ipaddressinfo=view.findViewById(R.id.ipaddressinfo).toString();
+        String hostinfo=view.findViewById(R.id.hostinfo).toString();
+        String webinfo= view.findViewById(R.id.webinfo).toString();
 
         builder.setView(view);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
