@@ -17,19 +17,27 @@ import cn.silen_dev.lantransmission.R;
  */
 
 public class InputWordDialog extends DialogFragment {
+    public String tempstr;
     public InputWordDialog(){
         super();
+        this.tempstr="";
+    }
+    public InputWordDialog(String tempstr){
+        super();
+        this.tempstr=tempstr;
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+
+    {
         super.onCreateDialog(savedInstanceState);
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
         builder.setTitle("请输入您要发送的文字");
         View view= LayoutInflater.from(getActivity()).inflate(R.layout.input_word_dialog,null);
         //布局控件等的安排
         EditText editText=((EditText)view.findViewById(R.id.inputareaofword));
-        editText.setText("我爱安卓！");
+        editText.setText(tempstr);
         builder.setView(view);
         builder.setPositiveButton("发送", new DialogInterface.OnClickListener() {
             @Override

@@ -2,12 +2,15 @@ package cn.silen_dev.lantransmission;
 import cn.silen_dev.lantransmission.dialog.*;
 
 import android.Manifest;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     RandomTextView randomTextView;
+    InputWordDialog inputWordDialog;
 
     FloatingActionButton[] floatingActionButtons=new FloatingActionButton[5];
 
@@ -104,8 +109,12 @@ public class MainActivity extends AppCompatActivity
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.fab_item_clipboard:
+                    inputWordDialog=new InputWordDialog(GetClipBoardContent());
+                    inputWordDialog.show(getSupportFragmentManager(),null);
                     break;
                 case R.id.fab_item_text:
+                    inputWordDialog=new InputWordDialog();
+                    inputWordDialog.show(getSupportFragmentManager(),null);
                     break;
                 case R.id.fab_item_video:
                     break;
@@ -129,6 +138,31 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
+    }
+
+    //剪切板内容
+    ClipboardManager clipboardManager;
+    static String tempStr;
+    public String GetClipBoardContent()
+    {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                clipboardManager=(ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+                if(clipboardManager==null)
+                {
+                    Log.i("cp", "clipboardManager==null");
+
+                }
+                if(clipboardManager.getText()!=null)
+                {
+                    tempStr=clipboardManager.getText().toString();
+                }
+            }
+        });
+        return tempStr;
     }
 
     @Override
