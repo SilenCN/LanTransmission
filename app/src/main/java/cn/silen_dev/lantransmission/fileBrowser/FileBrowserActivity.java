@@ -30,9 +30,10 @@ import cn.silen_dev.lantransmission.R;
 
 public class FileBrowserActivity extends AppCompatActivity {
 
+    public static OnFileBrowserResultListener onFileBrowserResultListener;
 
-    private static final int SELECT_FILE = 1;
-    private static final int SELECT_DIRECTORY = 2;
+    public static final int SELECT_FILE = 1;
+    public static final int SELECT_DIRECTORY = 2;
 
     File homeFile;
     private SharedPreferences sharedPreferences;
@@ -48,6 +49,8 @@ public class FileBrowserActivity extends AppCompatActivity {
     private int mode;
 
     LinearLayout filePathGroup;
+
+    private File selectFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +77,9 @@ public class FileBrowserActivity extends AppCompatActivity {
 
         listView.setOnItemClickListener(new ListViewListener());
 
-        if (mode==SELECT_FILE){
+        if (mode == SELECT_FILE) {
             getSupportActionBar().setTitle("选择文件");
-        }else{
+        } else {
             getSupportActionBar().setTitle("选择目录");
         }
 
@@ -86,6 +89,7 @@ public class FileBrowserActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             File file = (File) data.get(position).get("file");
+
             switch ((int) data.get(position).get("type")) {
                 case 0:
                     updateFileList(file.getParentFile());
@@ -94,7 +98,11 @@ public class FileBrowserActivity extends AppCompatActivity {
                     if (file.isDirectory()) {
                         updateFileList(file);
                     } else {
-
+                        if (null != onFileBrowserResultListener) {
+                            onFileBrowserResultListener.selectFile(file);
+                            onFileBrowserResultListener = null;
+                            finish();
+                        }
                     }
                     break;
             }
@@ -104,7 +112,7 @@ public class FileBrowserActivity extends AppCompatActivity {
 
     private void updateFileList(File file) {
         data.clear();
-
+        selectFile = file;
         if (checkIsRootFile(file)) {
             Map<String, Object> map = new HashMap<>();
             map.put("name", "内置储存");
@@ -113,7 +121,12 @@ public class FileBrowserActivity extends AppCompatActivity {
             map.put("file", rootFiles[0]);
             map.put("type", 1);
             data.add(map);
+            if (null != selectItem)
+                selectItem.setEnabled(false);
         } else {
+            if (selectItem != null) {
+                selectItem.setEnabled(true);
+            }
             Map<String, Object> parentMap = new HashMap<>();
             parentMap.put("name", "返回上一级");
             parentMap.put("image", findDrawableForFile(file));
@@ -143,16 +156,13 @@ public class FileBrowserActivity extends AppCompatActivity {
 
     private boolean checkIsRootFile(File nowFile) {
 
+        System.out.println(selectItem==null?"xxx":selectItem.isEnabled());
         for (File file : rootFiles) {
             if (file.getParent().equals(nowFile.getAbsolutePath())) {
-                if (null != selectItem)
-                    selectItem.setEnabled(false);
                 return true;
             }
         }
-        if (selectItem != null && !selectItem.isEnabled()) {
-            selectItem.setEnabled(true);
-        }
+
         return false;
     }
 
@@ -210,11 +220,21 @@ public class FileBrowserActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //TODO:左上角返回监听操作
+                closeActivity();
                 break;
-            //TODO:其他事件监听
+            case 1:
+                if (null != onFileBrowserResultListener) {
+                    onFileBrowserResultListener.selectFile(selectFile);
+                    onFileBrowserResultListener = null;
+                    finish();
+                }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        closeActivity();
     }
 
     @Override
@@ -231,17 +251,17 @@ public class FileBrowserActivity extends AppCompatActivity {
         filePathGroup.removeAllViews();
         List<LinearLayout> parentFilesLinearLayout = new ArrayList<>();
         File tempFile = file;
-        boolean flag=true;
+        boolean flag = true;
         while (flag) {
             final TextView name = new TextView(FileBrowserActivity.this);
             name.setTextSize(14);
             if (!checkIsRootFile(tempFile)) {
                 name.setTextColor(Color.rgb(117, 116, 117));
                 name.setText(tempFile.getName());
-            }else{
+            } else {
                 name.setTextColor(Color.rgb(22, 21, 22));
                 name.setText("内置存储");
-                flag=false;
+                flag = false;
             }
             name.setPadding(10, 0, 10, 0);
             final File finalTempFile = tempFile;
@@ -267,5 +287,13 @@ public class FileBrowserActivity extends AppCompatActivity {
         for (int i = parentFilesLinearLayout.size() - 1; i >= 0; i--) {
             filePathGroup.addView(parentFilesLinearLayout.get(i));
         }
+    }
+
+    public void closeActivity() {
+        if (null != onFileBrowserResultListener) {
+            onFileBrowserResultListener.nothing();
+            onFileBrowserResultListener = null;
+        }
+        finish();
     }
 }
