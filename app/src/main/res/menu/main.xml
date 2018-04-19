@@ -5,13 +5,13 @@
     <item
         android:id="@+id/action_scan_qrcode"
         android:title="@string/action_link"
-        android:icon="@drawable/ic_menu_camera"
+        android:icon="@mipmap/link"
         app:showAsAction="always"
         />
     <item
         android:id="@+id/action_transmission_manager"
         android:title="@string/action_transmission_manager"
-        android:icon="@drawable/ic_menu_camera"
+        android:icon="@mipmap/transform"
         app:showAsAction="always"
         />
 </menu>

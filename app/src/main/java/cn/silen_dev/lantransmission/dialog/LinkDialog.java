@@ -29,16 +29,15 @@ public class LinkDialog extends DialogFragment {
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
         builder.setTitle("设备连接");
         View view= LayoutInflater.from(getActivity()).inflate(R.layout.link_dialog,null);
-        //布局控件等的安排
-        String ipaddressinfo=view.findViewById(R.id.ipaddressinfo).toString();
-        String hostinfo=view.findViewById(R.id.hostinfo).toString();
-        String webinfo= view.findViewById(R.id.webinfo).toString();
+        //显示本机的信息
+
 
         builder.setView(view);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("连接其他设备", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                LinkOtherEquipmentDialog linkOtherEquipmentDialog=new LinkOtherEquipmentDialog();
+                linkOtherEquipmentDialog.show(getFragmentManager(),null);
             }
         });
         builder.setNegativeButton("取消",null);

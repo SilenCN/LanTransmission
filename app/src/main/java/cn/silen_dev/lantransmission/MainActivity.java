@@ -3,8 +3,6 @@ import cn.silen_dev.lantransmission.dialog.*;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.TextView;
 
 import cn.silen_dev.lantransmission.settings.SettingActivity;
@@ -70,10 +67,7 @@ public class MainActivity extends AppCompatActivity
 
        /*InputWordDialog inputWordDialog=new InputWordDialog();
         inputWordDialog.show(getSupportFragmentManager(),null);*/
-       /*LinkDialog linkDialog=new LinkDialog();
-       linkDialog.show(getSupportFragmentManager(),null);*/
-       LinkOtherEquipmentDialog linkOtherEquipmentDialog=new LinkOtherEquipmentDialog();
-       linkOtherEquipmentDialog.show(getSupportFragmentManager(),null);
+
     }
 
     @Override
@@ -100,6 +94,10 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id){
+            case R.id.action_scan_qrcode:
+                LinkDialog linkDialog=new LinkDialog();
+                linkDialog.show(getSupportFragmentManager(),null);
+                break;
 
         }
 
