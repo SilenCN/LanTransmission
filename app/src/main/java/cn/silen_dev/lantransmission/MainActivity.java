@@ -22,10 +22,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
+import java.io.File;
+
 import cn.silen_dev.lantransmission.fileBrowser.FileBrowserActivity;
+import cn.silen_dev.lantransmission.fileBrowser.OnFileBrowserResultListener;
 import cn.silen_dev.lantransmission.settings.SettingActivity;
 import cn.silen_dev.lantransmission.widget.RandomTextView.RandomTextView;
 
@@ -117,6 +121,18 @@ public class MainActivity extends AppCompatActivity
                 case R.id.fab_item_image:
                     break;
                 case R.id.fab_item_file:
+                    OnFileBrowserResultListener onFileBrowserResultListener=new OnFileBrowserResultListener() {
+                        @Override
+                        public void selectFile(File file) {
+                            Toast.makeText(MainActivity.this,file.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void nothing() {
+                            Toast.makeText(MainActivity.this,"Nothing selected!",Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                    FileBrowserActivity.onFileBrowserResultListener=onFileBrowserResultListener;
                     startActivity(new Intent(MainActivity.this, FileBrowserActivity.class));
                     break;
 
