@@ -19,6 +19,13 @@ public class DataTransmission extends SQLiteOpenHelper {
             "status integer,"+
             "sr integer)";
 
+    public static final String CREATE_EQUIPMENT = "create table Equipment(" +
+            "id integer primary key," +
+            "name text," +
+            "ip text," +
+            "type integer,"+
+            "status integer)";
+
     private Context mContext;
     public DataTransmission(Context context, String name, SQLiteDatabase.CursorFactory factory , int version)
     {
@@ -29,6 +36,7 @@ public class DataTransmission extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //执行建表语句
         db.execSQL(CREATE_TRANSMISSION);
+        db.execSQL(CREATE_EQUIPMENT);
     }
 
     @Override
