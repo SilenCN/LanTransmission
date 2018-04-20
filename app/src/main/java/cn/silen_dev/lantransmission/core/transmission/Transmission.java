@@ -6,6 +6,7 @@ public class Transmission {
     static int FILE=3;      //文件类型
     static int DEVICE=4;    //设备类型
 
+    private int id;
     private int type;
     private String fileName;
     private String message;
@@ -114,5 +115,13 @@ public class Transmission {
     }
 
     public void setSr(int sr) {this.sr = sr;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
