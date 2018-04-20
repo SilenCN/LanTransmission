@@ -4,10 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by HTT on 2018/4/20.
- */
-
 public class DataTransmission extends SQLiteOpenHelper {
 
     public static final String CREATE_TRANSMISSION="" +

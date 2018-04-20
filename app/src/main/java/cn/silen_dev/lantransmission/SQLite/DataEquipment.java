@@ -4,11 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by HTT on 2018/4/20.
- */
-
-
 public class DataEquipment extends SQLiteOpenHelper {
     //建表
     public static final String CREATE_EQUIPMENT = "create table Equipment(" +
