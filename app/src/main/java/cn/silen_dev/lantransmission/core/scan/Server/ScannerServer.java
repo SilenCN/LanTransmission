@@ -64,6 +64,7 @@ public class ScannerServer extends Thread {
     }
 
     public void find(String address){
+        System.out.println(address);
         if (null!=onScannerFindListener){
             onScannerFindListener.onFind(address);
         }

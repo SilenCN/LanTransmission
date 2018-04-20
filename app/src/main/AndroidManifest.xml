@@ -26,7 +26,8 @@
             android:name=".TestActivity"
             android:label="TestActivity" />
         <activity android:name=".settings.SettingActivity" />
-        <activity android:name=".fileBrowser.FileBrowserActivity"></activity>
+        <activity android:name=".fileBrowser.FileBrowserActivity"/>
+        <activity android:name=".transhistory.TransInfoActivity"/>
     </application>
 
 </manifest>

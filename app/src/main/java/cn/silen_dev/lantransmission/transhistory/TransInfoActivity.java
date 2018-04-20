@@ -1,8 +1,6 @@
 
 package cn.silen_dev.lantransmission.transhistory;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.Toolbar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -56,7 +55,8 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_trans_info);
+        setToolbar();
 
         rg_tab_bar=(RadioGroup)findViewById(R.id.rg_tab_bar);
         rg_tab_bar.setOnCheckedChangeListener(this);
@@ -69,10 +69,10 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
         rb_device=(RadioButton)findViewById(R.id.rb_device);
 
         //初始化传输记录数据
-//        init_all();
-//        init_pic();
+        init_all(new ArrayList<Transmission>(Arrays.asList(files)));
+        init_pic();
 //        init_vedio();
-//        init_file();
+        init_file();
 //        init_device();
     }
 
@@ -147,5 +147,27 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
         }
     }
 
+
+    public void setToolbar(){
+        setSupportActionBar((android.support.v7.widget.Toolbar) findViewById(R.id.toolbar));
+        try {
+            getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP, android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP);
+        } catch (Exception e) {
+        }
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            //TODO:其他事件监听
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 
