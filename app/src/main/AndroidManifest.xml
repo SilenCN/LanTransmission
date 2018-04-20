@@ -26,10 +26,7 @@
             android:name=".TestActivity"
             android:label="TestActivity" />
         <activity android:name=".settings.SettingActivity" />
-        <activity
-            android:name=".selectconn.SelectConnectionActivity"
-            android:label="@string/action_link">
-        </activity>
+        <activity android:name=".fileBrowser.FileBrowserActivity"></activity>
     </application>
 
 </manifest>

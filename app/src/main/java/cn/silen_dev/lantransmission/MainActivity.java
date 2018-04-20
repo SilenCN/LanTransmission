@@ -1,4 +1,5 @@
 package cn.silen_dev.lantransmission;
+import cn.silen_dev.lantransmission.core.scan.Server.ScannerServer;
 import cn.silen_dev.lantransmission.dialog.*;
 
 import android.Manifest;
@@ -27,10 +28,12 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.io.File;
+import java.net.SocketException;
 
 import cn.silen_dev.lantransmission.fileBrowser.FileBrowserActivity;
 import cn.silen_dev.lantransmission.fileBrowser.OnFileBrowserResultListener;
 import cn.silen_dev.lantransmission.settings.SettingActivity;
+import cn.silen_dev.lantransmission.transhistory.TransInfoActivity;
 import cn.silen_dev.lantransmission.widget.RandomTextView.RandomTextView;
 
 public class MainActivity extends AppCompatActivity
@@ -87,6 +90,15 @@ public class MainActivity extends AppCompatActivity
 
         findFloatingActionButton();
         requestPermission();
+
+        ScannerServer scannerServer= null;
+        try {
+            scannerServer = new ScannerServer();
+            scannerServer.start();
+            scannerServer.scan();
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -193,6 +205,8 @@ public class MainActivity extends AppCompatActivity
                 LinkDialog linkDialog=new LinkDialog();
                 linkDialog.show(getSupportFragmentManager(),null);
                 break;
+            case R.id.action_transmission_manager:
+                startActivity(new Intent(MainActivity.this,TransInfoActivity.class));
 
         }
         return super.onOptionsItemSelected(item);

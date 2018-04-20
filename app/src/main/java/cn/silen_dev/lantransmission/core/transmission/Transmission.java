@@ -1,6 +1,12 @@
 package cn.silen_dev.lantransmission.core.transmission;
 
 public class Transmission {
+    static int PICTURE=1; //图片类型
+    static int VEDIO=2;     //视频类型
+    static int FILE=3;      //文件类型
+    static int DEVICE=4;    //设备类型
+
+    private int id;
     private int type;
     private String fileName;
     private String message;
@@ -12,6 +18,26 @@ public class Transmission {
     private int status;
     private int sr;
 
+    public Transmission(int ty,String fn,String m,long len,long t,int id,String save,String send,int sta,int s)
+    {
+        this.type=ty;
+        this.fileName=fn;
+        this.message=m;
+        this.length=len;
+        this.time=t;
+        this.userId=id;
+        this.savePath=save;
+        this.sendPath=send;
+        this.status=sta;
+        this.sr=s;
+    }
+
+    public Transmission(String name,int id,int s)
+    {
+        this.fileName=name;
+        this.status=s;
+        this.userId=id;
+    }
     public int getType() {
         return type;
     }
@@ -88,7 +114,14 @@ public class Transmission {
         return sr;
     }
 
-    public void setSr(int sr) {
-        this.sr = sr;
+    public void setSr(int sr) {this.sr = sr;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
