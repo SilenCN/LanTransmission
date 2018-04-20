@@ -65,10 +65,10 @@
             android:textColor="@drawable/tab_menu_text"/>
 
         <RadioButton
-            android:id="@+id/rb_device"
+            android:id="@+id/rb_word"
             style="@style/tab_menu_item"
-            android:text="设备"
-            android:textColor="@drawable/tab_menu_text"/>
+            android:text="文字"
+            android:textColor="@drawable/tab_menu_text" />
     </RadioGroup>
     <!--</LinearLayout>-->
 

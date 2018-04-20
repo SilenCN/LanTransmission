@@ -33,6 +33,7 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
     private Toolbar toolbar;
 
     private FileList_Adapter adapter;
+    private WordList_Adapter adapter2;
     private GridLayoutManager layoutManager;
     private RecyclerView recyclerView;
     private RadioGroup rg_tab_bar;
@@ -66,7 +67,7 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
         rb_pic=(RadioButton)findViewById(R.id.rb_pic);
         rb_vedio=(RadioButton)findViewById(R.id.rb_vedio);
         rb_file=(RadioButton)findViewById(R.id.rb_file);
-        rb_device=(RadioButton)findViewById(R.id.rb_device);
+        rb_device=(RadioButton)findViewById(R.id.rb_word);
 
         //初始化传输记录数据
         init_all(new ArrayList<Transmission>(Arrays.asList(files)));
@@ -100,9 +101,9 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
                 adapter=new FileList_Adapter(transList_file);
                 recyclerView.setAdapter(adapter);
                 break;
-            case R.id.rb_device:
-                adapter=new FileList_Adapter(transList_device);
-                recyclerView.setAdapter(adapter);
+            case R.id.rb_word:
+                adapter2=new WordList_Adapter(transList_device);
+                recyclerView.setAdapter(adapter2);
                 break;
         }
     }
