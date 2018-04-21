@@ -208,6 +208,7 @@ private LinearLayoutManager layoutManager;
     public void init_file() {
         transList_file.clear();
         for(int i=0;i<20;i++){
+            
             Random random = new Random();
             int index=random.nextInt(files.length);
             transList_file.add(files[index]);
