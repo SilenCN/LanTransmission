@@ -35,7 +35,7 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
         TextView trans_word;
         TextView trans_word_user;
         TextView fileStatus;
-        ImageView fileLoad;
+        ImageView load;
 
         public ViewHolder(View view)
         {
@@ -43,7 +43,7 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
             cardView =(CardView) view;
             trans_word=(TextView) view.findViewById(R.id.trans_word);
             trans_word_user=(TextView) view.findViewById(R.id.trans_word_user);
-            fileLoad=(ImageView)view.findViewById(R.id.file_load);
+            load=(ImageView)view.findViewById(R.id.load);
             //fileStatus=(TextView) view.findViewById(R.id.file_status);
 //            check=(CheckBox) view.findViewById(R.id.check);
         }
@@ -69,13 +69,12 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
         Transmission transmission=wordList.get(position);
         holder.trans_word.setText((transmission.getFileName()).toString());
         holder.trans_word_user.setText(String.valueOf(transmission.getUserId()));
-        Log.d(TAG,String.valueOf(transmission.getSr()));
         switch (transmission.getSr()){
             case 0:
-                holder.fileLoad.setImageResource(R.mipmap.upload);
+                holder.load.setImageResource(R.mipmap.upload);
                 break;
             case 1:
-                holder.fileLoad.setImageResource(R.mipmap.dowload);
+                holder.load.setImageResource(R.drawable.dowload);
                 break;
         }
 

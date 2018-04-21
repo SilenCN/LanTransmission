@@ -33,13 +33,12 @@ import static cn.silen_dev.lantransmission.core.transmission.ConstValue.STATUS_N
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_IMAGE;
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_VIDEO;
 
-public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.ViewHolder>
-{
+public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.ViewHolder> {
+    private static final String TAG = "FileList_Adapter";
     private Context context;
     private List<Transmission> filesList;
 
-    static class ViewHolder extends RecyclerView.ViewHolder
-    {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView image;
         TextView fileName;
@@ -48,37 +47,37 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
         ImageView fileLoad;
         CheckBox check;
 
-        public ViewHolder(View view)
-        {
+        public ViewHolder(View view) {
             super(view);
-            cardView =(CardView) view;
-            image=(ImageView) view.findViewById(R.id.pictures);
-            fileName=(TextView) view.findViewById(R.id.file_name);
-            fileUser=(TextView) view.findViewById(R.id.file_user);
-            fileStatus=(TextView) view.findViewById(R.id.file_status);
-            fileLoad=(ImageView)view.findViewById(R.id.file_load);
+            cardView = (CardView) view;
+            image = (ImageView) view.findViewById(R.id.pictures);
+            fileName = (TextView) view.findViewById(R.id.file_name);
+            fileUser = (TextView) view.findViewById(R.id.file_user);
+            fileStatus = (TextView) view.findViewById(R.id.file_status);
+            fileLoad = (ImageView) view.findViewById(R.id.file_load);
         }
     }
-    public FileList_Adapter(List<Transmission> mfilesList){
-        filesList=mfilesList;
+
+    public FileList_Adapter(List<Transmission> mfilesList) {
+        filesList = mfilesList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(context == null){
-            context=parent.getContext();
+        if (context == null) {
+            context = parent.getContext();
         }
-        View view =LayoutInflater.from(context).inflate(R.layout.activity_trans_item,
-                parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.activity_trans_item,
+                parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Transmission transmission=filesList.get(position);
+        Transmission transmission = filesList.get(position);
         holder.fileName.setText((transmission.getFileName()).toString());
         holder.fileUser.setText(String.valueOf(transmission.getUserId()));
-        switch (transmission.getStatus()){
+        switch (transmission.getStatus()) {
             case STATUS_DONE:
                 holder.fileStatus.setText("已完成");
                 break;
@@ -89,27 +88,28 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
                 holder.fileStatus.setText("未完成");
                 break;
         }
-        Log.i("",String.valueOf(transmission.getSr()));
-        switch (transmission.getSr()){
+        switch (transmission.getSr()) {
             case SEND:
                 holder.fileLoad.setImageResource(R.mipmap.upload);
                 break;
             case RECEIVE:
-                holder.fileLoad.setImageResource(R.mipmap.dowload);
+                holder.fileLoad.setImageResource(R.drawable.dowload);
+                break;
+            default:
                 break;
         }
-        String path=transmission.getSavePath();//获取路径
+        String path = transmission.getSavePath();//获取路径
         Bitmap bmp = null;
-        switch(transmission.getType()){
+        switch (transmission.getType()) {
             case TRANSMISSION_IMAGE:
-                bmp = BitmapFactory.decodeFile(path + holder.fileName, null);
-                holder.fileLoad.setImageBitmap(bmp);
+                bmp = BitmapFactory.decodeFile(path, null);
+                holder.image.setImageBitmap(bmp);
                 break;
             case TRANSMISSION_VIDEO:
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 try {
                     retriever.setDataSource(path);
-                    bmp=retriever.getFrameAtTime();
+                    bmp = retriever.getFrameAtTime();
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 } catch (RuntimeException e) {
@@ -121,7 +121,7 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
                         e.printStackTrace();
                     }
                 }
-                holder.fileLoad.setImageBitmap(bmp);
+                holder.image.setImageBitmap(bmp);
                 break;
         }
     }

@@ -1,6 +1,8 @@
 package cn.silen_dev.lantransmission.core.transmission;
 
-public class Transmission {
+import java.io.Serializable;
+
+public class Transmission implements Serializable {
 
     private int id;
     private int type;
@@ -30,11 +32,10 @@ public class Transmission {
         this.sr=sr;
     }
 
-    public Transmission(String fileName,int userId,int status)
-    {
-        this.fileName=fileName;
-        this.status=status;
-        this.userId=userId;
+    public Transmission(String fileName, int userId, int status) {
+        this.fileName = fileName;
+        this.status = status;
+        this.userId = userId;
     }
     public Transmission(String fileName,int userId,int status,String savePath,int type,int sr)
     {
@@ -125,7 +126,8 @@ public class Transmission {
         return sr;
     }
 
-    public void setSr(int sr) {this.sr = sr;
+    public void setSr(int sr) {
+        this.sr = sr;
     }
 
     public int getId() {
