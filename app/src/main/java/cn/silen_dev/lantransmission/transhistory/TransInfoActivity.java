@@ -68,6 +68,7 @@ private LinearLayoutManager layoutManager;
             new Equipment("MI6","192.168.132.208",1,1,1),
             new Equipment("联想","192.168.132.248",0,1,1)
     };
+    
 //    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState){
