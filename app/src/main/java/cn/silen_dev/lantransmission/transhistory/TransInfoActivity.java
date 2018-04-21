@@ -123,7 +123,7 @@ private LinearLayoutManager layoutManager;
             case R.id.rb_word:
 //                init_file(new ArrayList<Transmission>(Arrays.asList(files)));
                 wAdapter=new WordList_Adapter(transList_word);
-                recyclerView.setAdapter(tAdapter);
+                recyclerView.setAdapter(wAdapter);
                 break;
             case R.id.rb_device:
 //                init_device(new ArrayList<Equipment>(Arrays.asList(device)));
@@ -184,9 +184,11 @@ private LinearLayoutManager layoutManager;
 
     public void init_all(){
         transList_all.clear();
-        int len=transList_all.size();
-        for(int i=0;i<len;i++)
-            transList_all.add(files[i]);
+        for(int i=0;i<20;i++) {
+            Random random = new Random();
+            int index = random.nextInt(files.length);
+            transList_all.add(files[index]);
+        }
     }
 
     public void init_pic() {
@@ -208,6 +210,7 @@ private LinearLayoutManager layoutManager;
     public void init_file() {
         transList_file.clear();
         for(int i=0;i<20;i++){
+
             Random random = new Random();
             int index=random.nextInt(files.length);
             transList_file.add(files[index]);
