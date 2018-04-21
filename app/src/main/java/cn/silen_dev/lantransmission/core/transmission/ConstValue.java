@@ -18,4 +18,12 @@ public class ConstValue {
 
     public static final int DEVICE_PHONE=0;
     public static final int DEVICE_Pcomputer=1;
+
+    public static final int STATUS_DONE=0;
+    public static final int STATUS_ING=1;
+    public static final int STATUS_NONE=2;
+
+    public static final int SEND=0;
+    public static final int RECEIVE=1;
+
 }
