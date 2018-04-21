@@ -55,7 +55,7 @@
         fab:menu_labels_position="left"
         fab:menu_openDirection="up"
         fab:menu_backgroundColor="@android:color/transparent"
-        fab:menu_fab_label="@string/fab_title">
+        >
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_item_file"

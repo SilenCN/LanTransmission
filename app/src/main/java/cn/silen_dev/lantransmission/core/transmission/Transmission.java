@@ -1,8 +1,6 @@
 package cn.silen_dev.lantransmission.core.transmission;
 
-import java.io.Serializable;
-
-public class Transmission implements Serializable {
+public class Transmission {
 
     private int id;
     private int type;
@@ -16,28 +14,39 @@ public class Transmission implements Serializable {
     private int status;
     private int sr;
 
-    public Transmission(int type, String fileName, String message, long length,
-                        long time, int userId, String savePath, String sendPath,
-                        int status, int sr) {
-        this.type = type;
-        this.fileName = fileName;
-        this.message = message;
-        this.length = length;
-        this.time = time;
-        this.userId = userId;
-        this.savePath = savePath;
-        this.sendPath = sendPath;
-        this.status = status;
-        this.sr = sr;
+    public Transmission(int type,String fileName,String message,long length,
+                        long time,int userId,String savePath,String sendPath,
+                        int status,int sr)
+    {
+        this.type=type;
+        this.fileName=fileName;
+        this.message=message;
+        this.length=length;
+        this.time=time;
+        this.userId=userId;
+        this.savePath=savePath;
+        this.sendPath=sendPath;
+        this.status=status;
+        this.sr=sr;
     }
 
-    public Transmission(String fileName, int userId, int status) {
-        this.fileName = fileName;
-        this.status = status;
-        this.userId = userId;
+    public Transmission(String fileName,int userId,int status)
+    {
+        this.fileName=fileName;
+        this.status=status;
+        this.userId=userId;
     }
-
-    public Transmission() {
+    public Transmission(String fileName,int userId,int status,String savePath,int type,int sr)
+    {
+        this.fileName=fileName;
+        this.status=status;
+        this.userId=userId;
+        this.savePath=savePath;
+        this.type=type;
+        this.sr=sr;
+    }
+    public Transmission()
+    {
     }
 
     public int getType() {
@@ -116,8 +125,7 @@ public class Transmission implements Serializable {
         return sr;
     }
 
-    public void setSr(int sr) {
-        this.sr = sr;
+    public void setSr(int sr) {this.sr = sr;
     }
 
     public int getId() {

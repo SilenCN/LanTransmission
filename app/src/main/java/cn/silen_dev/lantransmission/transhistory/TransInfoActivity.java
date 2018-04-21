@@ -50,7 +50,7 @@ private LinearLayoutManager layoutManager;
     private RadioButton rb_file;
     private RadioButton rb_device;
 
-    private Transmission[] files={
+    private Transmission[] files_1={
             new Transmission("000000000",0,0),
             new Transmission("111111111",1,1),
             new Transmission("222222222",2,2),
@@ -58,11 +58,17 @@ private LinearLayoutManager layoutManager;
             new Transmission("444444444",3,3),
             new Transmission("555555555",3,3),
     };
+    private Transmission[] files={
+            new Transmission("IMG_20170827_090027.jpg",0,0,"DCIM/Camera",1,0),
+            new Transmission("VID_20180302_103956.mp4",1,1,"内部存储/DCIM/Camera",2,0),
+            new Transmission("IMG_20180416_144022.jpg",2,2,"内部存储/DCIM/Camera",1,0)
+    };
     private Equipment[] device={
-            new Equipment("Nokia6","10.168.132.248",1,1,1),
+            new Equipment("Nokia6","10.168.132.248",0,1,1),
             new Equipment("MI6","192.168.132.208",1,1,1),
             new Equipment("联想","192.168.132.248",0,1,1)
     };
+    
 //    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState){
