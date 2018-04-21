@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import cn.silen_dev.lantransmission.R;
+import cn.silen_dev.lantransmission.core.transmission.ConstValue;
+import cn.silen_dev.lantransmission.core.transmission.Transmission;
 import cn.silen_dev.lantransmission.selectconn.SelectConnectionActivity;
 
 
@@ -46,7 +48,14 @@ public class InputWordDialog extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 if (null!=editText.getText()&&!editText.getText().toString().equals("")){
                     String text=editText.getText().toString();
-                    startActivity(new Intent(getActivity(), SelectConnectionActivity.class));
+                    Transmission transmission=new Transmission();
+                    transmission.setMessage(text);
+                    transmission.setType(ConstValue.TRANSMISSION_TEXT);
+                    transmission.setSr(ConstValue.SEND);
+                    Intent intent=new Intent();
+                    intent.setClass(getActivity(),SelectConnectionActivity.class);
+                    intent.putExtra("Transmission",transmission);
+                    startActivity(intent);
                 }
             }
         });

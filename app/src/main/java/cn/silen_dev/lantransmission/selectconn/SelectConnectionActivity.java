@@ -63,6 +63,7 @@ public class SelectConnectionActivity extends AppCompatActivity {
                 TransOperators transOperators=new TransOperators(SelectConnectionActivity.this);
                 transmission.setUserId(equipment.getId());
                 transmission.setId(transOperators.insertTransWithReturnId(transmission));
+                transmission.setTime(System.currentTimeMillis());
                 LanClient lanClient=new LanClient(equipment.getAddress());
                 lanClient.sendTransmisstion(transmission,((MyApplication) getApplication()).getMyEquipmentInfo());
             }

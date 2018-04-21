@@ -13,8 +13,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import cn.silen_dev.lantransmission.MyApplication;
+import cn.silen_dev.lantransmission.SQLite.TransOperators;
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 import cn.silen_dev.lantransmission.core.transmission.TcpMessage.TcpMessage;
+import cn.silen_dev.lantransmission.core.transmission.Transmission;
+import cn.silen_dev.lantransmission.dialog.NotificationCome;
 import cn.silen_dev.lantransmission.model.Equipment;
 
 public class ClientLinkThread extends Thread {
@@ -26,10 +29,12 @@ public class ClientLinkThread extends Thread {
     private String savePath;
     private boolean isRecieve;
     private MyApplication myApplication;
+    private TransOperators transOperators;
+
     public ClientLinkThread(Socket socket, MyApplication myApplication) {
         super();
         this.socket = socket;
-        this.myApplication=myApplication;
+        this.myApplication = myApplication;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class ClientLinkThread extends Thread {
             reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             line = reader.readLine();
-            System.out.println("LanServer:"+line);
+            System.out.println("LanServer:" + line);
             switch (line) {
                 case ConstValue.APP:
                     processApp();
@@ -87,15 +92,12 @@ public class ClientLinkThread extends Thread {
     }
 
     private void processHello() throws IOException {
-        //TODO:响应hello，需要补充本机信息
-        Equipment equipment = new Equipment();
-        equipment.setId(1);
-        equipment.setName("测试");
+
         TcpMessage tcpMessage = new TcpMessage();
         tcpMessage.setEquipment(myApplication.getMyEquipmentInfo());
         tcpMessage.setToken(ConstValue.REPLY_HELLO);
         PrintWriter writer = new PrintWriter(outputStream);
-       // writer.println(ConstValue.APP);
+        // writer.println(ConstValue.APP);
         writer.println(new Gson().toJson(tcpMessage));
         writer.flush();
     }
@@ -111,12 +113,25 @@ public class ClientLinkThread extends Thread {
     }
 
     private void processTransmission(TcpMessage tcpMessage) {
+
+        transOperators = new TransOperators(myApplication.getApplicationContext());
+
         //TODO:处理传输
         switch (tcpMessage.getTransmission().getType()) {
             case ConstValue.TRANSMISSION_TEXT:
             case ConstValue.TRANSMISSION_CLIPBOARD:
                 //TODO:收到文字类数据
                 System.out.println(tcpMessage.getTransmission().getMessage());
+                NotificationCome notificationCome = new NotificationCome(tcpMessage.getTransmission());
+                notificationCome.sendSimplestNotificationWithAction(myApplication.getApplicationContext());
+
+                Transmission transmission = new Transmission();
+                transmission.setTime(System.currentTimeMillis());
+                transmission.setSr(ConstValue.RECEIVE);
+                transmission.setUserId(tcpMessage.getEquipment().getId());
+                transmission.setStatus(ConstValue.STATUS_DONE);
+                transOperators.insertTrans(transmission);
+
                 break;
             case ConstValue.TRANSMISSION_FILE:
             case ConstValue.TRANSMISSION_IMAGE:
@@ -165,7 +180,12 @@ public class ClientLinkThread extends Thread {
     }
 
     public void fileRecieve(TcpMessage tcpMessage) {
-        System.out.println(new Gson().toJson(tcpMessage));
+        Transmission transmission = new Transmission();
+        transmission.setTime(System.currentTimeMillis());
+        transmission.setSr(ConstValue.RECEIVE);
+        transmission.setUserId(tcpMessage.getEquipment().getId());
+        transmission.setStatus(ConstValue.STATUS_NONE);
+        transOperators.insertTrans(transmission);
     }
 
     public void getCheck(boolean isRecieve, String saveFilePath) {
