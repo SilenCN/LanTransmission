@@ -1,9 +1,16 @@
 package cn.silen_dev.lantransmission.transhistory;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import cn.silen_dev.lantransmission.R;
@@ -22,6 +30,8 @@ import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.STATUS_DONE;
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.STATUS_ING;
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.STATUS_NONE;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_IMAGE;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_VIDEO;
 
 public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.ViewHolder>
 {
@@ -79,15 +89,43 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
                 holder.fileStatus.setText("未完成");
                 break;
         }
+        Log.i("",String.valueOf(transmission.getSr()));
         switch (transmission.getSr()){
             case SEND:
-                holder.fileLoad.setImageResource(R.mipmap.share);
+                holder.fileLoad.setImageResource(R.mipmap.upload);
                 break;
             case RECEIVE:
-                holder.fileLoad.setImageResource(R.mipmap.download);
+                holder.fileLoad.setImageResource(R.mipmap.dowload);
+                break;
+        }
+        String path=transmission.getSavePath();//获取路径
+        Bitmap bmp = null;
+        switch(transmission.getType()){
+            case TRANSMISSION_IMAGE:
+                bmp = BitmapFactory.decodeFile(path + holder.fileName, null);
+                holder.fileLoad.setImageBitmap(bmp);
+                break;
+            case TRANSMISSION_VIDEO:
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                try {
+                    retriever.setDataSource(path);
+                    bmp=retriever.getFrameAtTime();
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        retriever.release();
+                    } catch (RuntimeException e) {
+                        e.printStackTrace();
+                    }
+                }
+                holder.fileLoad.setImageBitmap(bmp);
                 break;
         }
     }
+
 
     @Override
     public int getItemCount() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import java.util.List;
 import cn.silen_dev.lantransmission.R;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
 
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.RECEIVE;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
+
 /**
  * Created by admin on 2018/4/20.
  */
@@ -23,6 +27,7 @@ import cn.silen_dev.lantransmission.core.transmission.Transmission;
 public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.ViewHolder> {
     private Context context;
     private List<Transmission> wordList;
+    private static final String TAG = "WordList_Adapter";
     static class ViewHolder extends RecyclerView.ViewHolder
     {
         CardView cardView;
@@ -30,7 +35,7 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
         TextView trans_word;
         TextView trans_word_user;
         TextView fileStatus;
-        CheckBox check;
+        ImageView fileLoad;
 
         public ViewHolder(View view)
         {
@@ -38,6 +43,7 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
             cardView =(CardView) view;
             trans_word=(TextView) view.findViewById(R.id.trans_word);
             trans_word_user=(TextView) view.findViewById(R.id.trans_word_user);
+            fileLoad=(ImageView)view.findViewById(R.id.file_load);
             //fileStatus=(TextView) view.findViewById(R.id.file_status);
 //            check=(CheckBox) view.findViewById(R.id.check);
         }
@@ -63,6 +69,16 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
         Transmission transmission=wordList.get(position);
         holder.trans_word.setText((transmission.getFileName()).toString());
         holder.trans_word_user.setText(String.valueOf(transmission.getUserId()));
+        Log.d(TAG,String.valueOf(transmission.getSr()));
+        switch (transmission.getSr()){
+            case 0:
+                holder.fileLoad.setImageResource(R.mipmap.upload);
+                break;
+            case 1:
+                holder.fileLoad.setImageResource(R.mipmap.dowload);
+                break;
+        }
+
     }
 
     @Override

@@ -41,6 +41,7 @@ import cn.silen_dev.lantransmission.core.transmission.Server.LanServer;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
 import cn.silen_dev.lantransmission.dialog.InputWordDialog;
 import cn.silen_dev.lantransmission.dialog.LinkDialog;
+import cn.silen_dev.lantransmission.dialog.NotificationCome;
 import cn.silen_dev.lantransmission.fileBrowser.FileBrowserActivity;
 import cn.silen_dev.lantransmission.fileBrowser.OnFileBrowserResultListener;
 import cn.silen_dev.lantransmission.fileBrowser.Utils;
