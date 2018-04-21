@@ -29,7 +29,7 @@
 
         <ImageView
             android:id="@+id/pictures"
-            android:layout_width="150dp"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@mipmap/test_1"/>
@@ -69,12 +69,13 @@
 
             <ImageView
                 android:id="@+id/file_load"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="10dp"
-                android:src="@mipmap/share" />
+                android:src="@mipmap/upload" />
+
         </RelativeLayout>
 
     </LinearLayout>

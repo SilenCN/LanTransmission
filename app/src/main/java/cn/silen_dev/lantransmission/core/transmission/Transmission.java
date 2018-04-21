@@ -36,6 +36,15 @@ public class Transmission {
         this.status=status;
         this.userId=userId;
     }
+    public Transmission(String fileName,int userId,int status,String savePath,int type,int sr)
+    {
+        this.fileName=fileName;
+        this.status=status;
+        this.userId=userId;
+        this.savePath=savePath;
+        this.type=type;
+        this.sr=sr;
+    }
     public Transmission()
     {
     }
