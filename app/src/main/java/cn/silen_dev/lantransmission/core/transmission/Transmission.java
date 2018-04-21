@@ -1,6 +1,8 @@
 package cn.silen_dev.lantransmission.core.transmission;
 
-public class Transmission {
+import java.io.Serializable;
+
+public class Transmission implements Serializable {
 
     private int id;
     private int type;
@@ -14,30 +16,28 @@ public class Transmission {
     private int status;
     private int sr;
 
-    public Transmission(int type,String fileName,String message,long length,
-                        long time,int userId,String savePath,String sendPath,
-                        int status,int sr)
-    {
-        this.type=type;
-        this.fileName=fileName;
-        this.message=message;
-        this.length=length;
-        this.time=time;
-        this.userId=userId;
-        this.savePath=savePath;
-        this.sendPath=sendPath;
-        this.status=status;
-        this.sr=sr;
+    public Transmission(int type, String fileName, String message, long length,
+                        long time, int userId, String savePath, String sendPath,
+                        int status, int sr) {
+        this.type = type;
+        this.fileName = fileName;
+        this.message = message;
+        this.length = length;
+        this.time = time;
+        this.userId = userId;
+        this.savePath = savePath;
+        this.sendPath = sendPath;
+        this.status = status;
+        this.sr = sr;
     }
 
-    public Transmission(String fileName,int userId,int status)
-    {
-        this.fileName=fileName;
-        this.status=status;
-        this.userId=userId;
+    public Transmission(String fileName, int userId, int status) {
+        this.fileName = fileName;
+        this.status = status;
+        this.userId = userId;
     }
-    public Transmission()
-    {
+
+    public Transmission() {
     }
 
     public int getType() {
@@ -116,7 +116,8 @@ public class Transmission {
         return sr;
     }
 
-    public void setSr(int sr) {this.sr = sr;
+    public void setSr(int sr) {
+        this.sr = sr;
     }
 
     public int getId() {

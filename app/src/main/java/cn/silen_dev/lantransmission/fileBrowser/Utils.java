@@ -34,6 +34,7 @@ public class Utils {
         return FormetFileSize(blockSize, sizeType);
     }
 
+
     /**
      * 调用此方法自动计算指定文件或指定文件夹的大小
      *
@@ -62,7 +63,7 @@ public class Utils {
      * @return
      * @throws Exception
      */
-    private static long getFileSize(File file) throws Exception {
+    public static long getFileSize(File file) throws Exception {
         long size = 0;
         if (file.exists()) {
             FileInputStream fis = null;

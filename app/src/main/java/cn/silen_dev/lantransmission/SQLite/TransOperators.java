@@ -9,6 +9,7 @@ import java.util.List;
 
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
+import cn.silen_dev.lantransmission.model.Equipment;
 
 /**
  * 传输记录操作类
@@ -18,11 +19,15 @@ public class TransOperators implements TransService{
 
     //建立数据库
     Context context;
-    public LanDataBase database=new LanDataBase(context,"LanDataBase.db",null,1);
-    SQLiteDatabase db=database.getWritableDatabase();
+    SQLiteDatabase db;
     Cursor cursor;
     List<Transmission> transList=new ArrayList<>();
     Transmission t;
+
+    public TransOperators(Context context) {
+        this.context=context;
+        db=DatabaseTool.getSqLiteDatabase(context);
+    }
 
     @Override
     /*插入一条传输记录*/
@@ -31,6 +36,17 @@ public class TransOperators implements TransService{
                 "values('"+t.getType()+"','"+t.getMessage()+"','"+t.getLength()+"','"+t.getTime()+"','"+t.getUserId()+
                 "','"+t.getSavePath()+"','"+t.getSendPath()+"','"+t.getStatus()+"','"+t.getSr()+"')";
         db.execSQL(insert);//返回值为void
+    }
+
+    public int insertTransWithReturnId(Transmission e){
+        insertTrans(e);
+        String sql = "select last_insert_rowid() from Equipment" ;
+        Cursor cursor = db.rawQuery(sql, null);
+        int a = -1;
+        if(cursor.moveToFirst()){
+            a = cursor.getInt(0);
+        }
+        return a;
     }
 
     @Override
@@ -115,7 +131,12 @@ public class TransOperators implements TransService{
         String select="select * from Transmission";
         cursor=db.rawQuery(select,null);
         transList.clear();
-        transList.add(get(cursor));
+
+        if(cursor.moveToFirst()) {
+            do {
+                transList.add(get(cursor));
+            }while(cursor.moveToNext());
+        }
         return transList;
     }
 
@@ -147,6 +168,7 @@ public class TransOperators implements TransService{
         db.execSQL(update,new String[]{String.valueOf(id)});
     }
 
+
     @Override
     public void updateSource(int id, int sr) {
         String update="update Equipment set sr='"+sr+"' where id=?";
@@ -161,6 +183,7 @@ public class TransOperators implements TransService{
 
     public Transmission get(Cursor cursor)
     {
+        int id=cursor.getInt(cursor.getColumnIndex("id"));
         String name=cursor.getString(cursor.getColumnIndex("name"));
         int type=cursor.getInt(cursor.getColumnIndex("type"));
         String message=cursor.getString(cursor.getColumnIndex("message"));
@@ -172,6 +195,9 @@ public class TransOperators implements TransService{
         String sendPath=cursor.getString(cursor.getColumnIndex("sendPath"));
         int sr=cursor.getInt(cursor.getColumnIndex("sr"));
         t=new Transmission(type,name,message,length,time,userId,savePath,sendPath,status,sr);
+        t.setId(id);
         return t;
     }
+
+
 }
