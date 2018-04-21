@@ -123,7 +123,7 @@ private LinearLayoutManager layoutManager;
             case R.id.rb_word:
 //                init_file(new ArrayList<Transmission>(Arrays.asList(files)));
                 wAdapter=new WordList_Adapter(transList_word);
-                recyclerView.setAdapter(tAdapter);
+                recyclerView.setAdapter(wAdapter);
                 break;
             case R.id.rb_device:
 //                init_device(new ArrayList<Equipment>(Arrays.asList(device)));
