@@ -1,6 +1,8 @@
 package cn.silen_dev.lantransmission.core.transmission;
 
-public class Transmission {
+import java.io.Serializable;
+
+public class Transmission implements Serializable {
 
     private int id;
     private int type;

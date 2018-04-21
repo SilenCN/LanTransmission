@@ -17,6 +17,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import static cn.silen_dev.lantransmission.R.color.colorPrimary;
@@ -65,7 +68,9 @@ public class SelectConnectionActivity extends AppCompatActivity {
                 transmission.setId(transOperators.insertTransWithReturnId(transmission));
                 transmission.setTime(System.currentTimeMillis());
                 LanClient lanClient=new LanClient(equipment.getAddress());
-                lanClient.sendTransmisstion(transmission,((MyApplication) getApplication()).getMyEquipmentInfo());
+                lanClient.sendTransmisstion(transmission,myApplication.getMyEquipmentInfo());
+                Toast.makeText(SelectConnectionActivity.this,"已发送！",Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
@@ -80,22 +85,6 @@ public class SelectConnectionActivity extends AppCompatActivity {
 
     }
 
-   /* private void initEquipment() {
-        equipmentList = new ArrayList<>();
-        Equipment equipment;
-        for (int i = 0; i < 16; i++) {
-            if(i%2==0){
-                equipment = new Equipment("小米手机", "192.168.10.3", 0);
-                equipment=new Equipment();
-                equipment.setAddress("");
-            }
-            else{
-                equipment = new Equipment("电脑", "192.168.10.3", 1);
-            }
-            equipmentList.add(equipment);
-        }
-    }
-*/
     class MyItemDecoration extends RecyclerView.ItemDecoration {
         private Paint mPaint;
         @Override
