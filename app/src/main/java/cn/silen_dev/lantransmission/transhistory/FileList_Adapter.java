@@ -15,7 +15,13 @@ import java.util.List;
 
 import cn.silen_dev.lantransmission.R;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
+import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.RECEIVE;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.STATUS_DONE;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.STATUS_ING;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.STATUS_NONE;
 
 public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.ViewHolder>
 {
@@ -25,20 +31,22 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
     static class ViewHolder extends RecyclerView.ViewHolder
     {
         CardView cardView;
-        ImageView imageView;
+        ImageView image;
         TextView fileName;
         TextView fileUser;
         TextView fileStatus;
+        ImageView fileLoad;
         CheckBox check;
 
         public ViewHolder(View view)
         {
             super(view);
             cardView =(CardView) view;
+            image=(ImageView) view.findViewById(R.id.pictures);
             fileName=(TextView) view.findViewById(R.id.file_name);
             fileUser=(TextView) view.findViewById(R.id.file_user);
             fileStatus=(TextView) view.findViewById(R.id.file_status);
-//            check=(CheckBox) view.findViewById(R.id.check);
+            fileLoad=(ImageView)view.findViewById(R.id.file_load);
         }
     }
     public FileList_Adapter(List<Transmission> mfilesList){
@@ -60,8 +68,25 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
         Transmission transmission=filesList.get(position);
         holder.fileName.setText((transmission.getFileName()).toString());
         holder.fileUser.setText(String.valueOf(transmission.getUserId()));
-        holder.fileStatus.setText(String.valueOf(transmission.getStatus()));
-//        holder.imageView.setImageResource();//暂时不设置图片
+        switch (transmission.getStatus()){
+            case STATUS_DONE:
+                holder.fileStatus.setText("已完成");
+                break;
+            case STATUS_ING:
+                holder.fileStatus.setText("传输中");
+                break;
+            case STATUS_NONE:
+                holder.fileStatus.setText("未完成");
+                break;
+        }
+        switch (transmission.getSr()){
+            case SEND:
+                holder.fileLoad.setImageResource(R.mipmap.share);
+                break;
+            case RECEIVE:
+                holder.fileLoad.setImageResource(R.mipmap.download);
+                break;
+        }
     }
 
     @Override
