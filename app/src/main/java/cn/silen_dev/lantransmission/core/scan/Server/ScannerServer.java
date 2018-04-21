@@ -1,24 +1,31 @@
 package cn.silen_dev.lantransmission.core.scan.Server;
 
+import android.content.SharedPreferences;
+import android.os.Message;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.util.logging.Handler;
 
 public class ScannerServer extends Thread {
-    private static final int SCANNER_SERVER_PORT = 234;
-    private static final int PACKET_LENGTH = 10*1024;
+    private static final int SCANNER_SERVER_PORT = 2333;
+    private static final int PACKET_LENGTH = 1024;
+
 
     private DatagramSocket datagramSocket;
 
     private OnScannerFindListener onScannerFindListener;
     private MessageTool messageTool;
-    public ScannerServer() throws SocketException {
+    private int uId;
+    public ScannerServer(int uId) throws SocketException {
         super();
+        this.uId=uId;
         datagramSocket=new DatagramSocket(SCANNER_SERVER_PORT);
-        messageTool=new MessageTool(this);
+        messageTool=new MessageTool(this,uId);
     }
 
     @Override
@@ -26,7 +33,7 @@ public class ScannerServer extends Thread {
         super.run();
         byte[] buffer=new byte[PACKET_LENGTH];
         while (true){
-            DatagramPacket packet=new DatagramPacket(buffer,PACKET_LENGTH);
+            DatagramPacket packet=new DatagramPacket(buffer,0,buffer.length);
             try {
                 datagramSocket.receive(packet);
                 messageTool.processMessage(packet);
@@ -37,8 +44,9 @@ public class ScannerServer extends Thread {
         }
     }
     public void scan(){
+        System.out.println("scan");
         InetSocketAddress inetAddress=new InetSocketAddress("255.255.255.255",SCANNER_SERVER_PORT);
-        send(inetAddress,ConstValue.HELLO);
+        send(inetAddress,ConstValue.HELLO+":"+uId);
     }
 
     public void replyHello(InetSocketAddress inetSocketAddress){

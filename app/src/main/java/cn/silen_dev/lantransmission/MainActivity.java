@@ -1,5 +1,6 @@
 package cn.silen_dev.lantransmission;
 import cn.silen_dev.lantransmission.core.scan.Server.ScannerServer;
+import cn.silen_dev.lantransmission.core.transmission.Server.LanServer;
 import cn.silen_dev.lantransmission.dialog.*;
 
 import android.Manifest;
@@ -91,17 +92,34 @@ public class MainActivity extends AppCompatActivity
         findFloatingActionButton();
         requestPermission();
 
-        ScannerServer scannerServer= null;
-        try {
-            scannerServer = new ScannerServer();
-            scannerServer.start();
-            scannerServer.scan();
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
+        /*
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ScannerServer scannerServer= null;
+                try {
+                    scannerServer = new ScannerServer((int)(Math.random()*1000000000));
+                    scannerServer.start();
+                    while (true) {
+                        try {
+                            Thread.sleep(1000);
+                            scannerServer.scan();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+*/
+        LanServer lanServer=new LanServer((MyApplication)getApplication());
+        lanServer.startLan();
 
     }
-
 
 
     private void findFloatingActionButton(){

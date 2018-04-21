@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import cn.silen_dev.lantransmission.MyApplication;
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 import cn.silen_dev.lantransmission.core.transmission.TcpMessage.TcpMessage;
 import cn.silen_dev.lantransmission.model.Equipment;
@@ -24,11 +25,11 @@ public class ClientLinkThread extends Thread {
     private Object lock = new Object();
     private String savePath;
     private boolean isRecieve;
-
-    public ClientLinkThread(Socket socket) {
+    private MyApplication myApplication;
+    public ClientLinkThread(Socket socket, MyApplication myApplication) {
         super();
         this.socket = socket;
-
+        this.myApplication=myApplication;
     }
 
     @Override
@@ -40,6 +41,7 @@ public class ClientLinkThread extends Thread {
             reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             line = reader.readLine();
+            System.out.println("LanServer:"+line);
             switch (line) {
                 case ConstValue.APP:
                     processApp();
@@ -90,11 +92,12 @@ public class ClientLinkThread extends Thread {
         equipment.setId(1);
         equipment.setName("测试");
         TcpMessage tcpMessage = new TcpMessage();
-        tcpMessage.setEquipment(equipment);
+        tcpMessage.setEquipment(myApplication.getMyEquipmentInfo());
         tcpMessage.setToken(ConstValue.REPLY_HELLO);
         PrintWriter writer = new PrintWriter(outputStream);
-        writer.println(ConstValue.APP);
+       // writer.println(ConstValue.APP);
         writer.println(new Gson().toJson(tcpMessage));
+        writer.flush();
     }
 
     private void processReplyHello(TcpMessage tcpMessage) {

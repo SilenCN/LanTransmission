@@ -1,6 +1,8 @@
 package cn.silen_dev.lantransmission;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +14,26 @@ public class MyApplication extends Application {
     private List<Equipment> connectEquipments;
     private Equipment myEquipmentInfo;
     private List<OnEquipmentLinstener> onEquipmentLinsteners=new ArrayList<>();
+    public static String myIpAddress;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate() {
         super.onCreate();
         connectEquipments=new ArrayList<>();
+        myEquipmentInfo=new Equipment();
+        sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (!sharedPreferences.contains("myId")){
+            sharedPreferences.edit().putInt("myId",(int)(Math.random()*2000000000));
+        }
+        myEquipmentInfo.setId(sharedPreferences.getInt("myId",(int)(Math.random()*2000000000)));
+        myEquipmentInfo.setName(sharedPreferences.getString("setting_user_name","Lan"));
     }
 
-    public void addEquipment(Equipment equipment){
+    public boolean addEquipment(Equipment equipment){
         for (Equipment equip:connectEquipments){
             if (equip.getId()==equipment.getId()){
-                return;
+                return false;
             }
         }
         connectEquipments.add(equipment);
@@ -31,7 +42,27 @@ public class MyApplication extends Application {
                 onEquipmentLinstener.remove(equipment);
             }
         }
+        return true;
     }
+
+    public Equipment findEquipment(int id){
+        for (Equipment equipment:connectEquipments){
+            if (equipment.getId()==id){
+                return equipment;
+            }
+        }
+        return null;
+    }
+    public Equipment findEquipment(String address){
+        for (Equipment equipment:connectEquipments){
+            if (equipment.getAddress().equals(address)){
+                return equipment;
+            }
+        }
+        return null;
+    }
+
+
     public void removeEquipment(Equipment equipment){
         for (Equipment equip:connectEquipments){
             if (equip.getId()==equipment.getId()){
@@ -47,6 +78,7 @@ public class MyApplication extends Application {
     }
 
     public Equipment getMyEquipmentInfo() {
+        myEquipmentInfo.setAddress(myIpAddress);
         return myEquipmentInfo;
     }
 
@@ -58,4 +90,5 @@ public class MyApplication extends Application {
         void add(Equipment equipment);
         void remove(Equipment equipment);
     }
+
 }
