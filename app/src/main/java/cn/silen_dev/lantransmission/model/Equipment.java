@@ -3,10 +3,12 @@ package cn.silen_dev.lantransmission.model;
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 
 public class Equipment {
-    public static final int TYPE_PHONE=0;
-    public static final int TYPE_COMPUTER=1;
-    public static final int STATUS_ONLINE=0;
-    public static final int STATUS_OFFLINE=1;
+    //类型
+    public static final int TYPE_PHONE=0;    //手机
+    public static final int TYPE_COMPUTER=1;    //电脑
+    //状态
+    public static final int STATUS_ONLINE=0; //在线
+    public static final int STATUS_OFFLINE=1;//离线
 
     private int id;
     private String name;     //设备名称
@@ -16,6 +18,9 @@ public class Equipment {
     private int status;     //设备状态：在线/不在线
 
     //构造函数
+    public Equipment(){
+    }
+
     public Equipment(String name,String ip,int type,int status,int port){
         this.name=name;
         this.address=ip;

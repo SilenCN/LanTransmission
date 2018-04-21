@@ -17,9 +17,12 @@ import cn.silen_dev.lantransmission.model.Equipment;
 
 public class EquipOperators implements equipService {
     //建立数据库
-    DataBase dBase;
-    private LanDataBase database=dBase.database;
+    Context context;
+    public LanDataBase database=new LanDataBase(context,"LanDataBase.db",null,1);
     SQLiteDatabase db=database.getWritableDatabase();
+    List<Equipment> equipList=new ArrayList<>();
+    Equipment e;
+    Cursor cursor;
 
     @Override
     /*插入一条设备信息*/
@@ -34,37 +37,36 @@ public class EquipOperators implements equipService {
     /*查询设备信息*/
     public Equipment getEquipment(int id) {
         String select="select * from Equipment where id = ?";
-        Cursor cursor=db.rawQuery(select,new String[]{String.valueOf(id)});
-
-        String name=cursor.getString(cursor.getColumnIndex("name"));
-        String ip=cursor.getString(cursor.getColumnIndex("address"));
-        int type=cursor.getInt(cursor.getColumnIndex("type"));
-        int status=cursor.getInt(cursor.getColumnIndex("status"));
-        int port=cursor.getInt(cursor.getColumnIndex("port"));
-
-        Equipment e=new Equipment(name,ip,type,status,port);
-        return e;
+        cursor=db.rawQuery(select,new String[]{String.valueOf(id)});
+        return get(cursor);
     }
 
     @Override
     /*获取所有信息*/
     public List<Equipment> getAllEquipment() {
         String select="select * from Equipment";
-        Cursor cursor=db.rawQuery(select,null);
-        List<Equipment> equipList=new ArrayList<>();
-        Equipment e;
+        cursor=db.rawQuery(select,null);
+        equipList.clear();
         if(cursor.moveToFirst()) {
             do {
-                String name = cursor.getString(cursor.getColumnIndex("name"));
-                String ip = cursor.getString(cursor.getColumnIndex("address"));
-                int type = cursor.getInt(cursor.getColumnIndex("type"));
-                int status = cursor.getInt(cursor.getColumnIndex("status"));
-                int port = cursor.getInt(cursor.getColumnIndex("port"));
-                e=new Equipment(name,ip,type,status,port);
-                equipList.add(e);
+                equipList.add(get(cursor));
             }while(cursor.moveToNext());
         }
         return equipList;
+    }
+
+    @Override
+    /*更细设备名称*/
+    public void updateEquipmentName(int id, String name) {
+        String update="update Equipment set name='"+name+"' where id=?";
+        db.execSQL(update,new String[]{String.valueOf(id)});
+    }
+
+    @Override
+    /*更新设备状态*/
+    public void updateEquipmentStatus(int id, int status) {
+        String update="update Equipment set status="+status+" where id=?";
+        db.execSQL(update,new String[]{String.valueOf(id)});
     }
 
     @Override
@@ -72,5 +74,15 @@ public class EquipOperators implements equipService {
     public void deleteEuipment(int id) {
         String delete="delete from Equipment where id = ?";
         db.execSQL(delete,new String[]{String.valueOf(id)});
+    }
+
+    public Equipment get(Cursor cursor){
+        String name = cursor.getString(cursor.getColumnIndex("name"));
+        String ip = cursor.getString(cursor.getColumnIndex("address"));
+        int type = cursor.getInt(cursor.getColumnIndex("type"));
+        int status = cursor.getInt(cursor.getColumnIndex("status"));
+        int port = cursor.getInt(cursor.getColumnIndex("port"));
+        e=new Equipment(name,ip,type,status,port);
+        return e;
     }
 }
