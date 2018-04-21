@@ -126,6 +126,7 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
         }
     }
 
+
     @Override
     public int getItemCount() {
         return filesList.size();
