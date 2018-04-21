@@ -53,6 +53,7 @@ import cn.silen_dev.lantransmission.widget.RandomTextView.RandomTextView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final int IMAGE = 1;
+    private static final int VIDEO =2;
 
     RandomTextView randomTextView;
     InputWordDialog inputWordDialog;
@@ -152,11 +153,14 @@ public class MainActivity extends AppCompatActivity
                     inputWordDialog.show(getSupportFragmentManager(), null);
                     break;
                 case R.id.fab_item_video:
+                    Intent intent2 = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent2, IMAGE);
                     break;
                 case R.id.fab_item_image:
                     Intent intent = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(intent, IMAGE);
+                            startActivityForResult(intent, VIDEO);
 
 
                     break;
@@ -219,7 +223,7 @@ public class MainActivity extends AppCompatActivity
         return tempStr;
     }
 
-    //获取图片路径
+    //获取图片和视频路径
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -232,6 +236,16 @@ public class MainActivity extends AppCompatActivity
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String imagePath = c.getString(columnIndex);
             Toast.makeText(getApplicationContext(),imagePath,Toast.LENGTH_SHORT).show();
+            c.close();
+        }
+        if (requestCode == VIDEO && resultCode == Activity.RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumns = {MediaStore.Images.Media.DATA};
+            Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+            c.moveToFirst();
+            int columnIndex = c.getColumnIndex(filePathColumns[0]);
+            String videoPath = c.getString(columnIndex);
+            Toast.makeText(getApplicationContext(),videoPath,Toast.LENGTH_SHORT).show();
             c.close();
         }
     }
