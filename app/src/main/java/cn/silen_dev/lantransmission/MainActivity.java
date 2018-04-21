@@ -1,6 +1,7 @@
 package cn.silen_dev.lantransmission;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,8 +9,13 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -46,6 +52,7 @@ import cn.silen_dev.lantransmission.widget.RandomTextView.RandomTextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final int IMAGE = 1;
 
     RandomTextView randomTextView;
     InputWordDialog inputWordDialog;
@@ -147,8 +154,10 @@ public class MainActivity extends AppCompatActivity
                 case R.id.fab_item_video:
                     break;
                 case R.id.fab_item_image:
-                    NotificationCome notificationCome=new NotificationCome();
-                    notificationCome.sendSimplestNotificationWithAction(MainActivity.this);
+                    Intent intent = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(intent, IMAGE);
+
 
                     break;
                 case R.id.fab_item_file:
@@ -209,6 +218,26 @@ public class MainActivity extends AppCompatActivity
         });
         return tempStr;
     }
+
+    //获取图片路径
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //获取图片路径
+        if (requestCode == IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumns = {MediaStore.Images.Media.DATA};
+            Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+            c.moveToFirst();
+            int columnIndex = c.getColumnIndex(filePathColumns[0]);
+            String imagePath = c.getString(columnIndex);
+            Toast.makeText(getApplicationContext(),imagePath,Toast.LENGTH_SHORT).show();
+            c.close();
+        }
+    }
+
+
+
 
     @Override
     public void onBackPressed() {
