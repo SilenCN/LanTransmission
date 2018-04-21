@@ -1,6 +1,9 @@
 package cn.silen_dev.lantransmission.dialog;
 
 import cn.silen_dev.lantransmission.R;
+import cn.silen_dev.lantransmission.core.transmission.Transmission;
+import cn.silen_dev.lantransmission.model.Equipment;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -15,8 +18,12 @@ import android.view.View;
  */
 
 public class TransConfirmDialogFragment  extends DialogFragment {
-    private DialogInterface.OnClickListener positiveCallback;
-    private DialogInterface.OnClickListener negativeCallback;
+    private Transmission transmission;
+    private Equipment equipment;
+    public TransConfirmDialogFragment(Transmission transmission,Equipment equipment) {
+        this.transmission=transmission;
+        this.equipment=equipment;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -25,17 +32,22 @@ public class TransConfirmDialogFragment  extends DialogFragment {
         final View view = inflater.inflate(R.layout.dialog_transconfirm, null);
         builder.setView(view);
         builder.setTitle("传输文件确认");
-        builder.setPositiveButton("确认传输",positiveCallback);
-        builder.setNegativeButton("取消传输",negativeCallback);
+
+        //TODO:获取各个控件ID，根据transmission和equipment初始化
+
+        builder.setPositiveButton("确认传输", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("取消传输", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
         return builder.create();
-    }
-    //重载show()方法
-    public void show(DialogInterface.OnClickListener positiveCallback,
-                     DialogInterface.OnClickListener negativeCallback,
-                     FragmentManager fragmentManager) {
-        this.positiveCallback = positiveCallback;
-        this.negativeCallback = negativeCallback;
-        show(fragmentManager, "TransConfirmDialogFragment");
     }
 }
 
