@@ -17,7 +17,6 @@ public class MessageTool {
     public void processMessage(DatagramPacket datagramPacket){
         byte[] data=datagramPacket.getData();
         String result=new String(data,0,datagramPacket.getLength());
-        System.out.println(result);
         int index=0;
         if ((index=result.indexOf(":"))!=-1){
             if (result.substring(index+1).equals(uId+"")){

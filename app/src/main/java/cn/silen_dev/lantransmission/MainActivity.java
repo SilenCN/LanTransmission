@@ -1,7 +1,4 @@
 package cn.silen_dev.lantransmission;
-import cn.silen_dev.lantransmission.core.scan.Server.ScannerServer;
-import cn.silen_dev.lantransmission.core.transmission.Server.LanServer;
-import cn.silen_dev.lantransmission.dialog.*;
 
 import android.Manifest;
 import android.app.Notification;
@@ -13,30 +10,36 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
 import java.io.File;
-import java.net.SocketException;
 
+import cn.silen_dev.lantransmission.core.transmission.ConstValue;
+import cn.silen_dev.lantransmission.core.transmission.Server.LanServer;
+import cn.silen_dev.lantransmission.core.transmission.Transmission;
+import cn.silen_dev.lantransmission.dialog.InputWordDialog;
+import cn.silen_dev.lantransmission.dialog.LinkDialog;
 import cn.silen_dev.lantransmission.fileBrowser.FileBrowserActivity;
 import cn.silen_dev.lantransmission.fileBrowser.OnFileBrowserResultListener;
+import cn.silen_dev.lantransmission.fileBrowser.Utils;
+import cn.silen_dev.lantransmission.model.Equipment;
+import cn.silen_dev.lantransmission.selectconn.SelectConnectionActivity;
 import cn.silen_dev.lantransmission.settings.SettingActivity;
 import cn.silen_dev.lantransmission.transhistory.TransInfoActivity;
 import cn.silen_dev.lantransmission.widget.RandomTextView.RandomTextView;
@@ -47,7 +50,9 @@ public class MainActivity extends AppCompatActivity
     RandomTextView randomTextView;
     InputWordDialog inputWordDialog;
 
-    FloatingActionButton[] floatingActionButtons=new FloatingActionButton[5];
+    FloatingActionButton[] floatingActionButtons = new FloatingActionButton[5];
+
+    MyApplication myApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,90 +70,79 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        randomTextView=findViewById(R.id.random_textview);
+        randomTextView = findViewById(R.id.random_textview);
         randomTextView.setOnRippleViewClickListener(new RandomTextView.OnRippleViewClickListener() {
             @Override
             public void onRippleViewClicked(View view) {
-                System.out.println(((TextView)view).getText());
+                System.out.println(((TextView) view).getText());
             }
         });
 
-        //startActivity(new Intent().setClass(this,TestActivity.class));
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                randomTextView.addKeyWord("肖丁剑");
-                randomTextView.addKeyWord("李新宇");
-                randomTextView.addKeyWord("彭艳秋");
-                randomTextView.addKeyWord("杨志坤");
-                randomTextView.addKeyWord("韩婷婷");
-                randomTextView.addKeyWord("习近平6");
-                randomTextView.addKeyWord("彭丽媛7");
-                randomTextView.addKeyWord("习近平8");
-                randomTextView.addKeyWord("彭丽媛9");
-                randomTextView.addKeyWord("习近平0");
-                randomTextView.show();
-            }
-        }, 2 * 1000);
 
         findFloatingActionButton();
         requestPermission();
 
-        /*
+        myApplication = (MyApplication) getApplication();
 
-        new Thread(new Runnable() {
+
+        myApplication.addEquipmentLinstener(new MyApplication.OnEquipmentLinstener() {
+            @Override
+            public void add(final Equipment equipment) {
+                System.out.println("界面：" + equipment.getName());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        randomTextView.addKeyWord(equipment.getName());
+                        randomTextView.show();
+                    }
+                });
+            }
+
+            @Override
+            public void remove(Equipment equipment) {
+
+            }
+        });
+
+        LanServer lanServer = new LanServer(myApplication);
+        lanServer.startLan();
+
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ScannerServer scannerServer= null;
-                try {
-                    scannerServer = new ScannerServer((int)(Math.random()*1000000000));
-                    scannerServer.start();
-                    while (true) {
-                        try {
-                            Thread.sleep(1000);
-                            scannerServer.scan();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                } catch (SocketException e) {
-                    e.printStackTrace();
+                for (Equipment equipment : myApplication.getConnectEquipments()) {
+                    randomTextView.addKeyWord(equipment.getName());
                 }
+                randomTextView.show();
             }
-        }).start();
-*/
-        LanServer lanServer=new LanServer((MyApplication)getApplication());
-        lanServer.startLan();
+        }, 300);
 
     }
 
 
-    private void findFloatingActionButton(){
-        floatingActionButtons[0]=findViewById(R.id.fab_item_file);
-        floatingActionButtons[1]=findViewById(R.id.fab_item_text);
-        floatingActionButtons[2]=findViewById(R.id.fab_item_video);
-        floatingActionButtons[3]=findViewById(R.id.fab_item_image);
-        floatingActionButtons[4]=findViewById(R.id.fab_item_clipboard);
-        for (int i=0;i<floatingActionButtons.length;i++){
+    private void findFloatingActionButton() {
+        floatingActionButtons[0] = findViewById(R.id.fab_item_file);
+        floatingActionButtons[1] = findViewById(R.id.fab_item_text);
+        floatingActionButtons[2] = findViewById(R.id.fab_item_video);
+        floatingActionButtons[3] = findViewById(R.id.fab_item_image);
+        floatingActionButtons[4] = findViewById(R.id.fab_item_clipboard);
+        for (int i = 0; i < floatingActionButtons.length; i++) {
             floatingActionButtons[i].setOnClickListener(new FABClickListener());
         }
     }
 
 
-    private class FABClickListener implements View.OnClickListener{
+    private class FABClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.fab_item_clipboard:
-                    inputWordDialog=new InputWordDialog(GetClipBoardContent());
-                    inputWordDialog.show(getSupportFragmentManager(),null);
+                    inputWordDialog = new InputWordDialog(GetClipBoardContent());
+                    inputWordDialog.show(getSupportFragmentManager(), null);
                     break;
                 case R.id.fab_item_text:
-                    inputWordDialog=new InputWordDialog();
-                    inputWordDialog.show(getSupportFragmentManager(),null);
+                    inputWordDialog = new InputWordDialog();
+                    inputWordDialog.show(getSupportFragmentManager(), null);
                     break;
                 case R.id.fab_item_video:
                     break;
@@ -158,18 +152,34 @@ public class MainActivity extends AppCompatActivity
 
                     break;
                 case R.id.fab_item_file:
-                    OnFileBrowserResultListener onFileBrowserResultListener=new OnFileBrowserResultListener() {
+                    OnFileBrowserResultListener onFileBrowserResultListener = new OnFileBrowserResultListener() {
                         @Override
                         public void selectFile(File file) {
-                            Toast.makeText(MainActivity.this,file.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                            Transmission transmission=new Transmission();
+                            transmission.setSendPath(file.getAbsolutePath());
+                            transmission.setFileName(file.getName());
+                            transmission.setMessage(transmission.getFileName());
+                            transmission.setType(ConstValue.TRANSMISSION_FILE);
+                            try {
+                                transmission.setLength(Utils.getFileSize(file));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            transmission.setSr(ConstValue.SEND);
+                            Intent intent=new Intent();
+                            intent.setClass(MainActivity.this, SelectConnectionActivity.class);
+                            intent.putExtra("Transmission",transmission);
+                            startActivity(intent);
+
                         }
 
                         @Override
                         public void nothing() {
-                            Toast.makeText(MainActivity.this,"Nothing selected!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Nothing selected!", Toast.LENGTH_SHORT).show();
                         }
                     };
-                    FileBrowserActivity.onFileBrowserResultListener=onFileBrowserResultListener;
+                    FileBrowserActivity.onFileBrowserResultListener = onFileBrowserResultListener;
                     startActivity(new Intent(MainActivity.this, FileBrowserActivity.class));
                     break;
 
@@ -180,22 +190,20 @@ public class MainActivity extends AppCompatActivity
     //剪切板内容
     ClipboardManager clipboardManager;
     static String tempStr;
-    public String GetClipBoardContent()
-    {
-        runOnUiThread(new Runnable() {
+
+    public String GetClipBoardContent() {
+        runOnUiThread( new Runnable() {
 
             @Override
             public void run() {
                 // TODO Auto-generated method stub
-                clipboardManager=(ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
-                if(clipboardManager==null)
-                {
+                clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipboardManager == null) {
                     Log.i("cp", "clipboardManager==null");
 
                 }
-                if(clipboardManager.getText()!=null)
-                {
-                    tempStr=clipboardManager.getText().toString();
+                if (clipboardManager.getText() != null) {
+                    tempStr = clipboardManager.getText().toString();
                 }
             }
         });
@@ -225,13 +233,13 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.action_scan_qrcode:
-                LinkDialog linkDialog=new LinkDialog();
-                linkDialog.show(getSupportFragmentManager(),null);
+                LinkDialog linkDialog = new LinkDialog();
+                linkDialog.show(getSupportFragmentManager(), null);
                 break;
             case R.id.action_transmission_manager:
-                startActivity(new Intent(MainActivity.this,TransInfoActivity.class));
+                startActivity(new Intent(MainActivity.this, TransInfoActivity.class));
 
         }
         return super.onOptionsItemSelected(item);
@@ -243,7 +251,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.nav_settings:
                 startActivity(new Intent(this, SettingActivity.class));
         }
@@ -253,7 +261,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void requestPermission(){
+    private void requestPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             // 没有权限。
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {

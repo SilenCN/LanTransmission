@@ -10,7 +10,7 @@ public class LanDataBase extends SQLiteOpenHelper {
     public static final String CREATE_TRANSMISSION=
             "create table Transmission("+
             "id integer primary key autoincrement," +
-            "name integer," +           // 传输文件名称
+            "name text," +           // 传输文件名称
             "type integer," +           // 传输文件类型
             "message text," +           //传输内容：文本（文本内容）或文件（文件名）
             "length integer,"+          //文件大小
@@ -30,13 +30,19 @@ public class LanDataBase extends SQLiteOpenHelper {
             "status int,"+              //设备状态
             "port int)";                //设备端口号
 
-    private Context mContext;
+    private static final int VERSION= 1;
+    private static final String DATABASE_NAME = "LanDataBase.db";
 //    private EquipOperators eContext;
 
     public LanDataBase(Context context, String name, SQLiteDatabase.CursorFactory factory , int version) {
         super(context, name, factory, version);
-        mContext = context;
+
     }
+
+    public LanDataBase(Context context){
+        this(context,DATABASE_NAME,null,VERSION);
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
