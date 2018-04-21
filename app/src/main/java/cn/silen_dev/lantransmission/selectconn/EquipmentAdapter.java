@@ -22,6 +22,11 @@ import cn.silen_dev.lantransmission.model.Equipment;
 public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.ViewHolder> {
 
     List<Equipment> equipmentList;
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -53,6 +58,9 @@ public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.View
             public void onClick(View v) { //recycler的item相应单击事件
                 int position = holder.getAdapterPosition();
                 Equipment equipment = equipmentList.get(position);
+                if (null!=onItemClickListener){
+                    onItemClickListener.onClick(equipment);
+                }
             }
         });
         return holder;
@@ -77,5 +85,9 @@ public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.View
     @Override
     public int getItemCount() {
         return equipmentList.size();
+    }
+
+    public interface OnItemClickListener{
+        void onClick(Equipment equipment);
     }
 }

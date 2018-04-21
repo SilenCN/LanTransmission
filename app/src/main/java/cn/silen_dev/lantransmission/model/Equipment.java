@@ -1,8 +1,10 @@
 package cn.silen_dev.lantransmission.model;
 
+import java.io.Serializable;
+
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 
-public class Equipment {
+public class Equipment implements Serializable{
     //类型
     public static final int TYPE_PHONE=0;    //手机
     public static final int TYPE_COMPUTER=1;    //电脑

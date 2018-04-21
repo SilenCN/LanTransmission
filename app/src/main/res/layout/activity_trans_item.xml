@@ -13,20 +13,6 @@
         android:layout_height="100dp"
         android:background="#ffffff">
 
-        <!--<RelativeLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="#ffffff">-->
-
-        <!--<CheckBox-->
-        <!--android:id="@+id/check"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentTop="true" />-->
-
-        <!--</RelativeLayout>-->
-
         <ImageView
             android:id="@+id/pictures"
             android:layout_width="130dp"

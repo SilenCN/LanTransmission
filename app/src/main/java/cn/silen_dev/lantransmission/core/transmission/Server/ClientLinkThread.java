@@ -165,7 +165,7 @@ public class ClientLinkThread extends Thread {
     }
 
     public void fileRecieve(TcpMessage tcpMessage) {
-
+        System.out.println(new Gson().toJson(tcpMessage));
     }
 
     public void getCheck(boolean isRecieve, String saveFilePath) {

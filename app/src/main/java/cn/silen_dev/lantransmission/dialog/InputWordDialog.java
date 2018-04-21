@@ -2,6 +2,7 @@ package cn.silen_dev.lantransmission.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import cn.silen_dev.lantransmission.R;
+import cn.silen_dev.lantransmission.selectconn.SelectConnectionActivity;
 
 
 /**
@@ -36,13 +38,16 @@ public class InputWordDialog extends DialogFragment {
         builder.setTitle("请输入您要发送的文字");
         View view= LayoutInflater.from(getActivity()).inflate(R.layout.input_word_dialog,null);
         //布局控件等的安排
-        EditText editText=((EditText)view.findViewById(R.id.inputareaofword));
+        final EditText editText=((EditText)view.findViewById(R.id.inputareaofword));
         editText.setText(tempstr);
         builder.setView(view);
         builder.setPositiveButton("发送", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                if (null!=editText.getText()&&!editText.getText().toString().equals("")){
+                    String text=editText.getText().toString();
+                    startActivity(new Intent(getActivity(), SelectConnectionActivity.class));
+                }
             }
         });
         builder.setNegativeButton("取消",null);

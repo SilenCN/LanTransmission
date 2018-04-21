@@ -39,7 +39,7 @@ public class MyApplication extends Application {
         connectEquipments.add(equipment);
         for (OnEquipmentLinstener onEquipmentLinstener:onEquipmentLinsteners){
             if (null!=onEquipmentLinstener){
-                onEquipmentLinstener.remove(equipment);
+                onEquipmentLinstener.add(equipment);
             }
         }
         return true;
@@ -77,6 +77,10 @@ public class MyApplication extends Application {
         }
     }
 
+    public List<Equipment> getConnectEquipments() {
+        return connectEquipments;
+    }
+
     public Equipment getMyEquipmentInfo() {
         myEquipmentInfo.setAddress(myIpAddress);
         return myEquipmentInfo;
@@ -91,4 +95,9 @@ public class MyApplication extends Application {
         void remove(Equipment equipment);
     }
 
+    public void addEquipmentLinstener(OnEquipmentLinstener onEquipmentLinstener){
+        if (null!=onEquipmentLinstener){
+            onEquipmentLinsteners.add(onEquipmentLinstener);
+        }
+    }
 }
