@@ -108,7 +108,7 @@ public class SelectConnectionActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                //TODO:左上角返回监听操作
+                finish();
                 break;
             //TODO:其他事件监听
         }

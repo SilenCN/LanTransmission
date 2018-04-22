@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.silen_dev.lantransmission.MyApplication;
 import cn.silen_dev.lantransmission.R;
 import cn.silen_dev.lantransmission.SQLite.EquipOperators;
 import cn.silen_dev.lantransmission.SQLite.TransOperators;
@@ -38,7 +39,7 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
     private FileList_Adapter tAdapter;
     private WordList_Adapter wAdapter;
     private EquipmentAdapter eAdapter;
-    private File_Adapter fAdapter;
+    private WordList_Adapter fAdapter;
 
     private static final String TAG = "TransInfoActivity";
 
@@ -54,11 +55,14 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
     private TransOperators transOperators;
     private EquipOperators equipOperators;
 
+    private MyApplication myApplication;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_info);
         setToolbar();
+
+        myApplication=(MyApplication)getApplication();
 
         rg_tab_bar = (RadioGroup) findViewById(R.id.rg_tab_bar);
         rg_tab_bar.setOnCheckedChangeListener(this);
@@ -83,8 +87,8 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
         for (Transmission transmission : transOperators.getAllTrans()) {
             System.out.println(new Gson().toJson(transmission));
         }
-//        Log.d(TAG, transList_word.get(0).getMessage());
-//        Log.d(TAG, String.valueOf(transList_word.get(0).getUserId()));
+
+        init_pic(transList_pic);
     }
 
     //为每个button设置点击监听事件
@@ -115,22 +119,22 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
     }
 
     public void init_pic(List<Transmission> transList_pic) {
-        tAdapter = new FileList_Adapter(transList_pic);
+        tAdapter = new FileList_Adapter(transList_pic,myApplication);
         recyclerView.setAdapter(tAdapter);
     }
 
     public void init_vedio(List<Transmission> transList_vedio) {
-        tAdapter = new FileList_Adapter(transList_vedio);
+        tAdapter = new FileList_Adapter(transList_vedio,myApplication);
         recyclerView.setAdapter(tAdapter);
     }
 
     public void init_file(List<Transmission> transList_file) {
-        fAdapter = new File_Adapter(transList_file);
+        fAdapter = new WordList_Adapter(transList_file,myApplication,this);
         recyclerView.setAdapter(fAdapter);
     }
 
     public void init_word(List<Transmission> transList_word) {
-        wAdapter = new WordList_Adapter(transList_word);
+        wAdapter = new WordList_Adapter(transList_word,myApplication,this);
         recyclerView.setAdapter(wAdapter);
     }
 

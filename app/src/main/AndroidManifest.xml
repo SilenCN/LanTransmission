@@ -30,10 +30,16 @@
         <activity
             android:name=".TestActivity"
             android:label="TestActivity" />
-        <activity android:name=".transhistory.TransInfoActivity" />
-        <activity android:name=".settings.SettingActivity" />
+        <activity android:name=".transhistory.TransInfoActivity"
+            android:label="传输记录"
+            />
+        <activity android:name=".settings.SettingActivity"
+            android:label="设置"
+            />
         <activity android:name=".fileBrowser.FileBrowserActivity" />
-        <activity android:name=".selectconn.SelectConnectionActivity" />
+        <activity android:name=".selectconn.SelectConnectionActivity"
+            android:label="发送到"
+            />
         <activity android:name=".ShareActivity">
             <intent-filter android:label="分享文件">
                 <action android:name="android.intent.action.SEND" />

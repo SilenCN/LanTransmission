@@ -21,10 +21,12 @@ import android.widget.TextView;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import cn.silen_dev.lantransmission.MyApplication;
 import cn.silen_dev.lantransmission.R;
 import cn.silen_dev.lantransmission.SQLite.TransOperators;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
+import cn.silen_dev.lantransmission.model.Equipment;
 
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.RECEIVE;
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
@@ -40,12 +42,14 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
     private List<Transmission> filesList;
     private OnItemClickListener onItemClickListener;
 
+    private MyApplication myApplication;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
-    public FileList_Adapter(List<Transmission> mfilesList) {
+    public FileList_Adapter(List<Transmission> mfilesList,MyApplication myApplication) {
         filesList = mfilesList;
+        this.myApplication=myApplication;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -91,7 +95,8 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
 //            }
 //        });
         holder.fileName.setText(transmission.getFileName());
-        holder.fileUser.setText(String.valueOf(transmission.getUserId()));
+        Equipment equipment=myApplication.findEquipment(transmission.getUserId());
+        holder.fileUser.setText(null==equipment?transmission.getUserId()+"":equipment.getName());
         switch (transmission.getStatus()) {
             case STATUS_DONE:
                 holder.fileStatus.setText("已完成");

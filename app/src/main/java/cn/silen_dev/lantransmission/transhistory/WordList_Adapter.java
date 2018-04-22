@@ -2,6 +2,7 @@ package cn.silen_dev.lantransmission.transhistory;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,8 +15,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cn.silen_dev.lantransmission.MyApplication;
 import cn.silen_dev.lantransmission.R;
+import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
+import cn.silen_dev.lantransmission.dialog.TextShowDialog;
+import cn.silen_dev.lantransmission.model.Equipment;
 
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.RECEIVE;
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
@@ -27,6 +32,8 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
     private Context context;
     private List<Transmission> wordList;
     private static final String TAG = "WordList_Adapter";
+    private MyApplication myApplication;
+    AppCompatActivity appCompatActivity;
     static class ViewHolder extends RecyclerView.ViewHolder
     {
         CardView cardView;
@@ -43,12 +50,13 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
             trans_word=(TextView) view.findViewById(R.id.trans_word);
             trans_word_user=(TextView) view.findViewById(R.id.trans_word_user);
             load=(ImageView)view.findViewById(R.id.load);
-            //fileStatus=(TextView) view.findViewById(R.id.file_status);
-//            check=(CheckBox) view.findViewById(R.id.check);
+
         }
     }
-    public WordList_Adapter(List<Transmission> mwordlist){
+    public WordList_Adapter(List<Transmission> mwordlist, MyApplication myApplication,AppCompatActivity appCompatActivity){
         wordList=mwordlist;
+        this.myApplication=myApplication;
+        this.appCompatActivity=appCompatActivity;
     }
 
     @NonNull
@@ -65,9 +73,10 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
 
     @Override
     public void onBindViewHolder(@NonNull WordList_Adapter.ViewHolder holder, int position) {
-        Transmission transmission=wordList.get(position);
+        final Transmission transmission=wordList.get(position);
         holder.trans_word.setText(transmission.getMessage());
-        holder.trans_word_user.setText(String.valueOf(transmission.getUserId()));
+        Equipment equipment=myApplication.findEquipment(transmission.getUserId());
+        holder.trans_word_user.setText(null==equipment?transmission.getUserId()+"":equipment.getName());
         switch (transmission.getSr()){
             case SEND:
                 holder.load.setImageResource(R.mipmap.upload);
@@ -77,6 +86,17 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
                 break;
             default:
                 break;
+        }
+        switch (transmission.getType()){
+            case ConstValue.TRANSMISSION_TEXT:
+                holder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextShowDialog textShowDialog=new TextShowDialog(transmission.getMessage());
+                        textShowDialog.show(appCompatActivity.getSupportFragmentManager(),null);
+                    }
+                });
+
         }
     }
 

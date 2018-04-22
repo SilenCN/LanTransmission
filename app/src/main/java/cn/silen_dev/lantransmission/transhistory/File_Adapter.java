@@ -12,8 +12,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cn.silen_dev.lantransmission.MyApplication;
 import cn.silen_dev.lantransmission.R;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
+import cn.silen_dev.lantransmission.model.Equipment;
 
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.RECEIVE;
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
@@ -25,6 +27,7 @@ import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
 public class File_Adapter extends RecyclerView.Adapter<File_Adapter.ViewHolder>{
     private Context context;
     private List<Transmission> fileList;
+    private MyApplication myApplication;
 //    private static final String TAG = "WordList_Adapter";
     static class ViewHolder extends RecyclerView.ViewHolder
     {
@@ -45,8 +48,9 @@ public class File_Adapter extends RecyclerView.Adapter<File_Adapter.ViewHolder>{
 //            check=(CheckBox) view.findViewById(R.id.check);
         }
     }
-    public File_Adapter(List<Transmission> mwordlist){
+    public File_Adapter(List<Transmission> mwordlist,MyApplication myApplication){
         fileList=mwordlist;
+        this.myApplication=myApplication;
     }
 
     @NonNull
@@ -65,7 +69,8 @@ public class File_Adapter extends RecyclerView.Adapter<File_Adapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Transmission transmission=fileList.get(position);
         holder.text_word.setText(transmission.getMessage());
-        holder.text_user.setText(String.valueOf(transmission.getUserId()));
+        Equipment equipment=myApplication.findEquipment(transmission.getUserId());
+        holder.text_user.setText(null==equipment?transmission.getUserId()+"":equipment.getName());
         switch (transmission.getSr()){
             case SEND:
                 holder.load.setImageResource(R.mipmap.upload);

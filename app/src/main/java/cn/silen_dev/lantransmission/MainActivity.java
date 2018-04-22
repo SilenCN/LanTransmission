@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     MyApplication myApplication;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -330,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED) {
+/*        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED) {
             // 没有权限。
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
                 // 用户拒绝过这个权限了，应该提示用户，为什么需要这个权限。
@@ -338,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // 申请授权。
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, 100);
             }
-        }
+        }*/
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             // 没有权限。

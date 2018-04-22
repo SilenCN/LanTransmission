@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.silen_dev.lantransmission.SQLite.EquipOperators;
 import cn.silen_dev.lantransmission.model.Equipment;
 
 public class MyApplication extends Application {
@@ -19,6 +20,8 @@ public class MyApplication extends Application {
 
     public static String BRODCAST_ADDRESS=null;
 
+    private EquipOperators equipOperators;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,6 +33,7 @@ public class MyApplication extends Application {
         }
         myEquipmentInfo.setId(sharedPreferences.getInt("myId",(int)(Math.random()*2000000000)));
         myEquipmentInfo.setName(sharedPreferences.getString("setting_user_name","Lan"));
+        equipOperators=new EquipOperators(this.getApplicationContext());
     }
 
     public boolean addEquipment(Equipment equipment){
@@ -39,6 +43,11 @@ public class MyApplication extends Application {
             }
         }
         connectEquipments.add(equipment);
+        if (equipOperators.getEquipment(equipment.getId())==null){
+            equipOperators.insertEquipment(equipment);
+        }else {
+            equipOperators.updateEquipmentName(equipment.getId(),equipment.getName());
+        }
         for (OnEquipmentLinstener onEquipmentLinstener:onEquipmentLinsteners){
             if (null!=onEquipmentLinstener){
                 onEquipmentLinstener.add(equipment);
@@ -53,7 +62,7 @@ public class MyApplication extends Application {
                 return equipment;
             }
         }
-        return null;
+        return equipOperators.getEquipment(id);
     }
     public Equipment findEquipment(String address){
         for (Equipment equipment:connectEquipments){
