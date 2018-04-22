@@ -74,10 +74,10 @@ public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.View
         holder.equipmentType.setText(String.valueOf(equipment.getType()));
         switch (equipment.getType()){
             case 0:
-                holder.icon.setImageResource(R.drawable.phone);
+                holder.icon.setImageResource(R.mipmap.phone);
                 break;
             case 1:
-                holder.icon.setImageResource(R.drawable.computer);
+                holder.icon.setImageResource(R.mipmap.computer);
                 break;
         }
     }

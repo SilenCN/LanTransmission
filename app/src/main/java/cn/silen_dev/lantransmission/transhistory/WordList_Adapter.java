@@ -74,7 +74,7 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
                 holder.load.setImageResource(R.mipmap.upload);
                 break;
             case 1:
-                holder.load.setImageResource(R.drawable.dowload);
+                holder.load.setImageResource(R.mipmap.dowload);
                 break;
         }
 
