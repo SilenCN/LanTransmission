@@ -23,7 +23,6 @@ import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
 /**
  * Created by admin on 2018/4/20.
  */
-
 public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.ViewHolder> {
     private Context context;
     private List<Transmission> wordList;

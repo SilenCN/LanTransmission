@@ -115,6 +115,7 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
             default:
                 break;
         }
+
         String path = transmission.getSavePath();//获取路径
         Bitmap bmp = null;
         switch (transmission.getType()) {
