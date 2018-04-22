@@ -18,7 +18,6 @@ public class ConfirmDialogActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Transmission transmission = (Transmission) intent.getSerializableExtra("transmission");
         Equipment equipment = (Equipment) intent.getSerializableExtra("equipment");
-
         TransConfirmDialogFragment transConfirmDialogFragment = new TransConfirmDialogFragment(transmission, equipment);
         transConfirmDialogFragment.show(getSupportFragmentManager(), null);
         transConfirmDialogFragment.setOnTransmissionConfirmResultListener(onTransmissionConfirmResultListener);

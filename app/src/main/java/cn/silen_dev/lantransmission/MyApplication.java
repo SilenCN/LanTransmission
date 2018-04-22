@@ -17,6 +17,8 @@ public class MyApplication extends Application {
     public static String myIpAddress;
     private SharedPreferences sharedPreferences;
 
+    public static String BRODCAST_ADDRESS=null;
+
     @Override
     public void onCreate() {
         super.onCreate();

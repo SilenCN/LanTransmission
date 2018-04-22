@@ -129,9 +129,9 @@ public class TransConfirmDialogFragment extends DialogFragment {
                 getActivity().finish();
             }
         });
-        Dialog dialog=builder.create();
-        dialog.getWindow().setType((WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY));
-        return dialog;
+        /*Dialog dialog=builder.create();
+        dialog.getWindow().setType((WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY));*/
+        return builder.create();
     }
 
     public void setOnTransmissionConfirmResultListener(OnTransmissionConfirmResultListener onTransmissionConfirmResultListener) {
