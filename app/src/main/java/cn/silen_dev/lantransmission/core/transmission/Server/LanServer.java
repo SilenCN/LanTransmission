@@ -1,5 +1,7 @@
 package cn.silen_dev.lantransmission.core.transmission.Server;
 
+import android.support.v4.app.FragmentManager;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -22,15 +24,18 @@ public class LanServer extends Thread {
 
     private ScannerServer scannerServer;
 
-    public LanServer(MyApplication myApplication) {
-        this(DEFAULT_PORT, myApplication);
+    private FragmentManager fragmentManager;
+
+    public LanServer(MyApplication myApplication,FragmentManager fragmentManager) {
+        this(DEFAULT_PORT, myApplication,fragmentManager);
     }
 
-    public LanServer(int port, MyApplication myApplication) {
+    public LanServer(int port, MyApplication myApplication, FragmentManager fragmentManager) {
         super();
         this.port = port;
         clientLinkThreads = new ArrayList<>();
         this.myApplication = myApplication;
+        this.fragmentManager=fragmentManager;
     }
 
 
@@ -41,7 +46,7 @@ public class LanServer extends Thread {
             serverSocket = new ServerSocket(port);
             while (flag) {
                 Socket socket = serverSocket.accept();
-                ClientLinkThread clientLinkThread = new ClientLinkThread(socket, myApplication);
+                ClientLinkThread clientLinkThread = new ClientLinkThread(socket, myApplication,fragmentManager);
                 clientLinkThread.start();
                 clientLinkThreads.add(clientLinkThread);
             }

@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        LanServer lanServer = new LanServer(myApplication);
+        LanServer lanServer = new LanServer(myApplication,getSupportFragmentManager());
         lanServer.startLan();
 
         new Handler().postDelayed(new Runnable() {
@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }, 300);
 
+    /*    startActivity(new Intent(MainActivity.this,ConfirmDialogActivity.class));*/
     }
 
 
@@ -306,33 +307,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED) {
+            // 没有权限。
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
+                // 用户拒绝过这个权限了，应该提示用户，为什么需要这个权限。
+            } else {
+                // 申请授权。
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, 100);
+            }
+        }
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             // 没有权限。
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
                 // 用户拒绝过这个权限了，应该提示用户，为什么需要这个权限。
             } else {
                 // 申请授权。
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.INTERNET}, 1);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.INTERNET}, 100);
             }
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // 没有权限。
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
             } else {
                 // 申请授权。
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
             }
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // 没有权限。
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 300);
 
             } else {
                 // 申请授权。
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 300);
             }
         }
 
