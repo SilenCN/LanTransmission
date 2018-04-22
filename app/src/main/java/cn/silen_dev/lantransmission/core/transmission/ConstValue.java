@@ -14,6 +14,7 @@ public class ConstValue {
     public static final int TRANSMISSION_VIDEO = 2;//视频
     public static final int TRANSMISSION_TEXT = 3;//文本
     public static final int TRANSMISSION_DEVICE = 4;//设备
+    public static final int TRANSMISSION_CLIPBOARD=5;
 
     public static final int DEVICE_PHONE = 0;
     public static final int DEVICE_COMPUTER = 1;
