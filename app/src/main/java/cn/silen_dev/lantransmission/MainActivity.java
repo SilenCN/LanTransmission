@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,6 +32,10 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 import cn.silen_dev.lantransmission.core.transmission.Server.LanServer;
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MyApplication.BRODCAST_ADDRESS=new GetBroadCast().getBroadcastAddress(this);
+        MyApplication.BRODCAST_ADDRESS=new GetBroadCast(this).getBroadcastAddress();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -125,8 +130,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }, 300);
 
-    }
 
+    }
 
     private void findFloatingActionButton() {
         floatingActionButtons[0] = findViewById(R.id.fab_item_file);
@@ -290,6 +295,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.action_transmission_manager:
                 startActivity(new Intent(MainActivity.this, TransInfoActivity.class));
+                break;
 
         }
         return super.onOptionsItemSelected(item);
@@ -304,6 +310,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id) {
             case R.id.nav_settings:
                 startActivity(new Intent(this, SettingActivity.class));
+                break;
+            case R.id.nav_share:
+
+                //PackageManager pm = getPackageManager();
+               // try {
+               //     ApplicationInfo ai = pm.getApplicationInfo("cn.silen_dev.lantransmission", 0);
+               //     startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(ai.sourceDir))).setType("*/*"), "Share"));
+               // } catch (PackageManager.NameNotFoundException e) {
+
+              //  }
+
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

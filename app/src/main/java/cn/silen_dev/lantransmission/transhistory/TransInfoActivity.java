@@ -1,34 +1,25 @@
 
 package cn.silen_dev.lantransmission.transhistory;
 
-import android.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import cn.silen_dev.lantransmission.R;
 import cn.silen_dev.lantransmission.SQLite.EquipOperators;
 import cn.silen_dev.lantransmission.SQLite.TransOperators;
-import cn.silen_dev.lantransmission.core.transmission.Client.LanClient;
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
-import cn.silen_dev.lantransmission.dialog.TextDialog;
 import cn.silen_dev.lantransmission.model.Equipment;
 import cn.silen_dev.lantransmission.selectconn.EquipmentAdapter;
 //import cn.silen_dev.lantransmission.transhistory.WordList_Adapter.OnItemClickListener;
@@ -48,7 +39,7 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
     private WordList_Adapter wAdapter;
     private EquipmentAdapter eAdapter;
 
-private static final String TAG = "TransInfoActivity";
+    private static final String TAG = "TransInfoActivity";
 
     private LinearLayoutManager layoutManager;
     private RecyclerView recyclerView;
@@ -75,20 +66,20 @@ private static final String TAG = "TransInfoActivity";
         rb_pic.setChecked(true);
         rb_vedio = (RadioButton) findViewById(R.id.rb_vedio);
         rb_file = (RadioButton) findViewById(R.id.rb_file);
-        rb_word=(RadioButton)findViewById(R.id.rb_word);
+        rb_word = (RadioButton) findViewById(R.id.rb_word);
         rb_device = (RadioButton) findViewById(R.id.rb_device);
 
-        transOperators=new TransOperators(this);
-        equipOperators=new EquipOperators(this);
+        transOperators = new TransOperators(this);
+        equipOperators = new EquipOperators(this);
 
-        transList_word=transOperators.getAllTrans(ConstValue.TRANSMISSION_TEXT);
-        transList_pic=transOperators.getAllTrans(ConstValue.TRANSMISSION_IMAGE);
-        transList_device=equipOperators.getAllEquipment();
-        transList_file=transOperators.getAllTrans(ConstValue.TRANSMISSION_FILE);
-        transList_vedio=transOperators.getAllTrans(ConstValue.TRANSMISSION_VIDEO);
+        transList_word = transOperators.getAllTrans(ConstValue.TRANSMISSION_TEXT);
+        transList_pic = transOperators.getAllTrans(ConstValue.TRANSMISSION_IMAGE);
+        transList_device = equipOperators.getAllEquipment();
+        transList_file = transOperators.getAllTrans(ConstValue.TRANSMISSION_FILE);
+        transList_vedio = transOperators.getAllTrans(ConstValue.TRANSMISSION_VIDEO);
 
 
-        for(Transmission transmission:transOperators.getAllTrans()){
+        for (Transmission transmission : transOperators.getAllTrans()) {
             System.out.println(new Gson().toJson(transmission));
         }
 //        Log.d(TAG, transList_word.get(0).getMessage());
@@ -141,6 +132,7 @@ private static final String TAG = "TransInfoActivity";
         wAdapter = new WordList_Adapter(transList_word);
         recyclerView.setAdapter(wAdapter);
     }
+
     public void init_device(List<Equipment> transList_device) {
         eAdapter = new EquipmentAdapter(transList_device);
         recyclerView.setAdapter(eAdapter);

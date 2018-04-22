@@ -32,7 +32,7 @@ public class LanDataBase extends SQLiteOpenHelper {
 
     private static final int VERSION= 1;
     private static final String DATABASE_NAME = "LanDataBase.db";
-//    private EquipOperators eContext;
+
 
     public LanDataBase(Context context, String name, SQLiteDatabase.CursorFactory factory , int version) {
         super(context, name, factory, version);

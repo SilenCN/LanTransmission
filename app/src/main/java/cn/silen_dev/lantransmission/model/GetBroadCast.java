@@ -4,21 +4,65 @@ import android.content.Context;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.util.Log;
+
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 /**
  * Created by admin on 2018/4/22.
  */
 
 public class GetBroadCast {
+    WifiManager wifiManager;
     WifiInfo wifiInfo;
     DhcpInfo dhcpInfo;
 
+    public GetBroadCast(Context context) {
+        wifiManager=((WifiManager) context.getSystemService(Context.WIFI_SERVICE));
+        wifiInfo = wifiManager.getConnectionInfo();
+        dhcpInfo = wifiManager.getDhcpInfo();
 
-    public GetBroadCast() {
     }
 
+    public String getBroadcastAddress(){
+        if (getWifiApState() == WIFI_AP_STATE.WIFI_AP_STATE_ENABLED){
+            String ip= getWifiApIpAddress();
+           return ip.substring(0,ip.lastIndexOf(".")+1)+"255";
+        }else{
+            String ip=intToIp(dhcpInfo.ipAddress);
+            String mask=intToIp(dhcpInfo.netmask);
+            return getBroadcastAddress(ip,mask);
+        }
+    }
+
+
+    public enum WIFI_AP_STATE {
+        WIFI_AP_STATE_DISABLING, WIFI_AP_STATE_DISABLED, WIFI_AP_STATE_ENABLING,  WIFI_AP_STATE_ENABLED, WIFI_AP_STATE_FAILED
+    }
+    private WIFI_AP_STATE getWifiApState(){
+        int tmp;
+        try {
+            Method method = wifiManager.getClass().getMethod("getWifiApState");
+            tmp = ((Integer) method.invoke(wifiManager));
+            // Fix for Android 4
+            if (tmp > 10) {
+                tmp = tmp - 10;
+            }
+            return WIFI_AP_STATE.class.getEnumConstants()[tmp];
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return WIFI_AP_STATE.WIFI_AP_STATE_FAILED;
+        }
+    }
+/*
+
     public String getIP(Context context) {
-        WifiManager my_wifiManager = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE));
+        WifiManager my_wifiManager = ;
         wifiInfo = my_wifiManager.getConnectionInfo();
         dhcpInfo = my_wifiManager.getDhcpInfo();
         return intToIp(dhcpInfo.ipAddress);
@@ -31,16 +75,38 @@ public class GetBroadCast {
         dhcpInfo = my_wifiManager.getDhcpInfo();
         return intToIp(dhcpInfo.netmask);
     }
+*/
 
     private String intToIp(int paramInt) {
         return (paramInt & 0xFF) + "." + (0xFF & paramInt >> 8) + "." + (0xFF & paramInt >> 16) + "."
                 + (0xFF & paramInt >> 24);
     }
 
-    public String getBroadcastAddress(Context context) {
-        return getBroadcastAddress(getIP(context), getNetmask(context));
-    }
 
+
+
+    public String getWifiApIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface
+                    .getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                if (intf.getName().contains("wlan")) {
+                    for (Enumeration<InetAddress> enumIpAddr = intf
+                            .getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                        InetAddress inetAddress = enumIpAddr.nextElement();
+                        if (!inetAddress.isLoopbackAddress()
+                                && (inetAddress.getAddress().length == 4)) {
+                            Log.d("cdcd", inetAddress.getHostAddress());
+                            return inetAddress.getHostAddress();
+                        }
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            Log.e("", ex.toString());
+        }
+        return null;
+    }
 
     public String getBroadcastAddress(String ip, String netmask) {
         String[] ips = ip.split("\\.");
