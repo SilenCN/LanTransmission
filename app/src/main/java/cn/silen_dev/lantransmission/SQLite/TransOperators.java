@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class TransOperators implements TransService{
     List<Transmission> transList=new ArrayList<>();
     Transmission t;
 
+    private static String TAG="GET";
     public TransOperators(Context context) {
         this.context=context;
         db=DatabaseTool.getSqLiteDatabase(context);
@@ -65,6 +67,7 @@ public class TransOperators implements TransService{
     /*根据文件类型返回传输列表*/
     public List<Transmission> getAllTrans(int type) {
         String select="select * from Transmission where type = ?";
+        Log.d(TAG, String.valueOf(type));
         switch (type){
             //图片
             case ConstValue.TRANSMISSION_IMAGE:
@@ -143,6 +146,12 @@ public class TransOperators implements TransService{
             }while(cursor.moveToNext());
         }
         return transList;
+    }
+
+    /*更新文件发送路径*/
+    public void updateStatus(int id, int status) {
+        String update="update Equipment set status='"+status+"' where id=?";
+        db.execSQL(update,new String[]{String.valueOf(id)});
     }
 
     @Override
