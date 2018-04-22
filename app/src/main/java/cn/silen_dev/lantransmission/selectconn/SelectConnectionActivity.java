@@ -65,7 +65,7 @@ public class SelectConnectionActivity extends AppCompatActivity {
             public void onClick(Equipment equipment) {
                 TransOperators transOperators=new TransOperators(SelectConnectionActivity.this);
                 transmission.setUserId(equipment.getId());
-                transmission.setId(transOperators.insertTransWithReturnId(transmission));
+                transmission.setId((int)transOperators.insertTransWithReturnId(transmission));
                 transmission.setTime(System.currentTimeMillis());
                 LanClient lanClient=new LanClient(equipment.getAddress());
                 lanClient.sendTransmisstion(transmission,myApplication.getMyEquipmentInfo());

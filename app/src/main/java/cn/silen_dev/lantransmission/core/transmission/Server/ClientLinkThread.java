@@ -1,5 +1,8 @@
 package cn.silen_dev.lantransmission.core.transmission.Server;
 
+import android.content.Intent;
+import android.support.v4.app.FragmentManager;
+
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -12,12 +15,15 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import cn.silen_dev.lantransmission.ConfirmDialogActivity;
 import cn.silen_dev.lantransmission.MyApplication;
 import cn.silen_dev.lantransmission.SQLite.TransOperators;
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 import cn.silen_dev.lantransmission.core.transmission.TcpMessage.TcpMessage;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
 import cn.silen_dev.lantransmission.dialog.NotificationCome;
+import cn.silen_dev.lantransmission.dialog.NotificationUtils;
+import cn.silen_dev.lantransmission.dialog.TransConfirmDialogFragment;
 import cn.silen_dev.lantransmission.model.Equipment;
 
 public class ClientLinkThread extends Thread {
@@ -31,8 +37,11 @@ public class ClientLinkThread extends Thread {
     private MyApplication myApplication;
     private TransOperators transOperators;
 
-    public ClientLinkThread(Socket socket, MyApplication myApplication) {
+    private FragmentManager fragmentManager;
+
+    public ClientLinkThread(Socket socket, MyApplication myApplication, FragmentManager fragmentManager) {
         super();
+        this.fragmentManager = fragmentManager;
         this.socket = socket;
         this.myApplication = myApplication;
     }
@@ -147,15 +156,7 @@ public class ClientLinkThread extends Thread {
                         break;
                     }
                     if (isRecieve) {
-                        File file;
-                        while (true) {
-                            file = new File(savePath);
-                            if (file.exists()) {
-                                savePath = savePath.substring(0, savePath.lastIndexOf(".")) + "(1)" + savePath.substring(savePath.lastIndexOf("."));
-                            } else {
-                                break;
-                            }
-                        }
+                        File file = new File(savePath);
                         try {
                             FileOutputStream fileOutputStream = new FileOutputStream(file);
                             byte[] buffer = new byte[2048];
@@ -166,6 +167,10 @@ public class ClientLinkThread extends Thread {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
+                        new NotificationUtils(myApplication.getApplicationContext()).sendNotification("传输完成", file.getName());
+
+
 
                     } else {
 
@@ -179,13 +184,61 @@ public class ClientLinkThread extends Thread {
         //TODO:发送广播
     }
 
-    public void fileRecieve(TcpMessage tcpMessage) {
-        Transmission transmission = new Transmission();
-        transmission.setTime(System.currentTimeMillis());
-        transmission.setSr(ConstValue.RECEIVE);
-        transmission.setUserId(tcpMessage.getEquipment().getId());
-        transmission.setStatus(ConstValue.STATUS_NONE);
-        transOperators.insertTrans(transmission);
+    public void fileRecieve(final TcpMessage tcpMessage) {
+
+        ConfirmDialogActivity.onTransmissionConfirmResultListener = new TransConfirmDialogFragment.OnTransmissionConfirmResultListener() {
+            @Override
+            public void send(String savePath) {
+                savePath = savePath + "/" + tcpMessage.getTransmission().getFileName();
+                File file;
+                while (true) {
+                    file = new File(savePath);
+                    if (file.exists()) {
+                        if (-1 == savePath.lastIndexOf(".")) {
+                            savePath = savePath + "(1)";
+                        } else {
+                            savePath = savePath.substring(0, savePath.lastIndexOf(".")) + "(1)" + savePath.substring(savePath.lastIndexOf("."));
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                tcpMessage.getTransmission().setSavePath(savePath);
+                tcpMessage.getTransmission().setStatus(ConstValue.STATUS_ING);
+                getCheck(true, tcpMessage.getTransmission().getSavePath());
+
+                Transmission transmission = tcpMessage.getTransmission();
+                transmission.setTime(System.currentTimeMillis());
+                transmission.setSr(ConstValue.RECEIVE);
+                transmission.setUserId(tcpMessage.getEquipment().getId());
+                transmission.setStatus(ConstValue.STATUS_DONE);
+
+                transmission.setId((int)transOperators.insertTransWithReturnId(transmission));
+                System.out.println(new Gson().toJson(transmission));
+                System.out.println(new Gson().toJson(tcpMessage));
+            }
+
+            @Override
+            public void cancel() {
+                tcpMessage.getTransmission().setStatus(ConstValue.STATUS_NONE);
+                getCheck(false, null);
+                Transmission transmission = tcpMessage.getTransmission();
+                transmission.setTime(System.currentTimeMillis());
+                transmission.setSr(ConstValue.RECEIVE);
+                transmission.setUserId(tcpMessage.getEquipment().getId());
+                transmission.setStatus(ConstValue.STATUS_NONE);
+
+                transmission.setId((int)transOperators.insertTransWithReturnId(transmission));
+
+            }
+        };
+
+        Intent intent = new Intent();
+        intent.putExtra("transmission", tcpMessage.getTransmission());
+        intent.putExtra("equipment", tcpMessage.getEquipment());
+        intent.setClass(myApplication.getApplicationContext(), ConfirmDialogActivity.class);
+        myApplication.getApplicationContext().startActivity(intent);
+
     }
 
     public void getCheck(boolean isRecieve, String saveFilePath) {

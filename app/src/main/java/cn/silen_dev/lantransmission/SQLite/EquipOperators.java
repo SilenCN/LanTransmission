@@ -1,5 +1,6 @@
 package cn.silen_dev.lantransmission.SQLite;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,6 +36,16 @@ public class EquipOperators implements equipService {
                 e.getAddress() + "','" + e.getType() + "','" + e.getStatus() + "','" +
                 e.getPort() + "')";
         db.execSQL(insert);//返回值为void
+    }
+
+    public long insertEquipWithReturnId(Equipment t){
+        ContentValues contentValue=new ContentValues();
+        contentValue.put("name",t.getName());
+        contentValue.put("ip",t.getAddress());
+        contentValue.put("type",t.getType());
+        contentValue.put("status",t.getStatus());
+        contentValue.put("port",t.getPort());
+        return db.insert("Transmission", null, contentValue);
     }
 
 
