@@ -23,7 +23,7 @@ public class LanDataBase extends SQLiteOpenHelper {
     //设备信息表：id自动增加
     public static final String CREATE_EQUIPMENT =
             "create table Equipment(" +
-            "id integer primary key autoincrement," +
+            "id integer" +
             "name text," +              //设备名称
             "ip text," +                //设备ip
             "type int,"+                //设备类型
