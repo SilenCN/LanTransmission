@@ -12,18 +12,27 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
+
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_FILE;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_IMAGE;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_TEXT;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_VIDEO;
 
 /**
  * Created by 杨志坤 on 2018/4/18.
  */
 
-public class TransConfirmDialogFragment  extends DialogFragment {
+public class TransConfirmDialogFragment extends DialogFragment {
+
     private Transmission transmission;
     private Equipment equipment;
-    public TransConfirmDialogFragment(Transmission transmission,Equipment equipment) {
-        this.transmission=transmission;
-        this.equipment=equipment;
-    }
+    private TextView fileName;
+    private TextView fileType;
+    private TextView sender;
+    private TextView sendIp;
+    private TextView sendTime;
+    private TextView catalogue;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -32,9 +41,12 @@ public class TransConfirmDialogFragment  extends DialogFragment {
         final View view = inflater.inflate(R.layout.dialog_transconfirm, null);
         builder.setView(view);
         builder.setTitle("传输文件确认");
-
-        //TODO:获取各个控件ID，根据transmission和equipment初始化
-
+        fileName = (TextView) view.findViewById(R.id.text_FileName);
+        fileType = (TextView) view.findViewById(R.id.text_FileType);
+        sender = (TextView) view.findViewById(R.id.text_Sender);
+        sendIp = (TextView) view.findViewById(R.id.text_SendIP);
+        sendTime = (TextView) view.findViewById(R.id.text_SendTime);
+        catalogue = (TextView) view.findViewById(R.id.text_Catalogue);
         builder.setPositiveButton("确认传输", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -49,19 +61,31 @@ public class TransConfirmDialogFragment  extends DialogFragment {
         });
         return builder.create();
     }
-}
 
-/**这段代码放入调入该TransConfirmDialog的Activity中
- * 用于显示该对话框，并实现对话框的确认和取消功能。
- *
- public void showTransConfirmDialog(){
- TransConfirmDialogFragment confirmDialogFragment = new TransConfirmDialogFragment();
- confirmDialogFragment.show(new DialogInterface.OnClickListener() {
-@Override
-public void onClick(DialogInterface dialog, int which) {}
-},new DialogInterface.OnClickListener() {
-@Override
-public void onClick(DialogInterface dialog, int which) {}
-}, getFragmentManager());
- }
- */
+    public void show(Transmission transmission, Equipment equipment, FragmentManager manager) {
+        this.transmission = transmission;
+        this.equipment = equipment;
+        fileName.setText(transmission.getFileName());
+        switch (transmission.getType()) {
+            case TRANSMISSION_FILE:
+                fileType.setText("文件");
+            case TRANSMISSION_IMAGE:
+                fileType.setText("图片");
+            case TRANSMISSION_VIDEO:
+                fileType.setText("视频");
+            case TRANSMISSION_TEXT:
+                fileType.setText("文本");
+        }
+        sender.setText(equipment.getName());
+        sendIp.setText(transmission.getSendPath());
+        sendTime.setText(String.valueOf(transmission.getTime()));
+        super.show(manager, "TransConfirmDialogFragment");
+    }
+}
+    /**
+     * 调用显示ConfirmDialog
+     * TransConfirmDialogFragment confirmDialogFragment=new TransConfirmDialogFragment();
+     * confirmDialogFragment.show(transmission,equipment,getFragmentManager());
+     */
+
+
