@@ -125,7 +125,7 @@ public class ClientLinkThread extends Thread {
                 NotificationCome notificationCome = new NotificationCome(tcpMessage.getTransmission());
                 notificationCome.sendSimplestNotificationWithAction(myApplication.getApplicationContext());
 
-                Transmission transmission = new Transmission();
+                Transmission transmission = tcpMessage.getTransmission();
                 transmission.setTime(System.currentTimeMillis());
                 transmission.setSr(ConstValue.RECEIVE);
                 transmission.setUserId(tcpMessage.getEquipment().getId());
