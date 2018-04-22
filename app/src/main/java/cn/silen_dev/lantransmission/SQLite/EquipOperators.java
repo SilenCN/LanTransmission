@@ -19,7 +19,7 @@ public class EquipOperators implements equipService {
     //建立数据库
     Context context;
     SQLiteDatabase db;
-    List<Equipment> equipList = new ArrayList<>();
+    List<Equipment> equipList_1;
     Equipment e;
     Cursor cursor;
 
@@ -52,8 +52,8 @@ public class EquipOperators implements equipService {
     @Override
     /*查询设备信息*/
     public Equipment getEquipment(int id) {
-        String select = "select * from Equipment where id = ?";
-        cursor = db.rawQuery(select, new String[]{String.valueOf(id)});
+        String select = "select * from Equipment where id ="+id;
+        cursor = db.rawQuery(select, null);
         return get(cursor);
     }
 
@@ -62,6 +62,7 @@ public class EquipOperators implements equipService {
     public List<Equipment> getAllEquipment() {
         String select = "select * from Equipment";
         cursor = db.rawQuery(select, null);
+        List<Equipment> equipList=new ArrayList<>();
         equipList.clear();
         if (cursor.moveToFirst()) {
             do {
@@ -74,22 +75,22 @@ public class EquipOperators implements equipService {
     @Override
     /*更细设备名称*/
     public void updateEquipmentName(int id, String name) {
-        String update = "update Equipment set name='" + name + "' where id=?";
-        db.execSQL(update, new String[]{String.valueOf(id)});
+        String update = "update Equipment set name='" + name + "' where id="+id;
+        db.execSQL(update, null);
     }
 
     @Override
     /*更新设备状态*/
     public void updateEquipmentStatus(int id, int status) {
-        String update = "update Equipment set status=" + status + " where id=?";
-        db.execSQL(update, new String[]{String.valueOf(id)});
+        String update = "update Equipment set status=" + status + " where id="+id;
+        db.execSQL(update, null);
     }
 
     @Override
     /*删除一条设备记录*/
     public void deleteEuipment(int id) {
-        String delete = "delete from Equipment where id = ?";
-        db.execSQL(delete, new String[]{String.valueOf(id)});
+        String delete = "delete from Equipment where id ="+id;
+        db.execSQL(delete,null);
     }
 
     public Equipment get(Cursor cursor) {

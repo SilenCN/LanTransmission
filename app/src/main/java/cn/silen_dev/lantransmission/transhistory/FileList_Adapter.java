@@ -81,7 +81,7 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Transmission transmission = filesList.get(position);
+          Transmission transmission = filesList.get(position);
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) { //recycler的item相应单击事件
@@ -110,7 +110,7 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
                 holder.fileLoad.setImageResource(R.mipmap.upload);
                 break;
             case RECEIVE:
-                holder.fileLoad.setImageResource(R.drawable.dowload);
+                holder.fileLoad.setImageResource(R.mipmap.dowload);
                 break;
             default:
                 break;

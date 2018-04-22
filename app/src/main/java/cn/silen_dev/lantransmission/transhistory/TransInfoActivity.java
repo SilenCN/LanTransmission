@@ -38,6 +38,7 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
     private FileList_Adapter tAdapter;
     private WordList_Adapter wAdapter;
     private EquipmentAdapter eAdapter;
+    private File_Adapter fAdapter;
 
     private static final String TAG = "TransInfoActivity";
 
@@ -124,8 +125,8 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
     }
 
     public void init_file(List<Transmission> transList_file) {
-        wAdapter = new WordList_Adapter(transList_file);
-        recyclerView.setAdapter(wAdapter);
+        fAdapter = new File_Adapter(transList_file);
+        recyclerView.setAdapter(fAdapter);
     }
 
     public void init_word(List<Transmission> transList_word) {
