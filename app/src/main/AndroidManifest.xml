@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:name=".MyApplication"
@@ -33,15 +33,14 @@
         <activity android:name=".selectconn.SelectConnectionActivity" />
         <activity android:name=".ShareActivity">
             <intent-filter android:label="分享文件">
-                    <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND" />
 
-                    <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-                    <data android:mimeType="*/*" />
-
+                <data android:mimeType="*/*" />
             </intent-filter>
-
         </activity>
+        <activity android:name=".widget.RandomTextView.TransConfirmActivity"></activity>
     </application>
 
 </manifest>
