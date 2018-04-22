@@ -1,18 +1,29 @@
 package cn.silen_dev.lantransmission.dialog;
 
-import cn.silen_dev.lantransmission.R;
-import cn.silen_dev.lantransmission.core.transmission.Transmission;
-import cn.silen_dev.lantransmission.model.Equipment;
 
-import android.app.AlertDialog;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import cn.silen_dev.lantransmission.R;
+import cn.silen_dev.lantransmission.core.transmission.Transmission;
+import cn.silen_dev.lantransmission.fileBrowser.FileBrowserActivity;
+import cn.silen_dev.lantransmission.fileBrowser.OnFileBrowserResultListener;
+import cn.silen_dev.lantransmission.model.Equipment;
 
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_FILE;
 import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMISSION_IMAGE;
@@ -34,6 +45,12 @@ public class TransConfirmDialogFragment extends DialogFragment {
     private TextView sendTime;
     private TextView catalogue;
 
+    public TransConfirmDialogFragment(Transmission transmission, Equipment equipment) {
+        super();
+        this.transmission=transmission;
+        this.equipment=equipment;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -44,9 +61,53 @@ public class TransConfirmDialogFragment extends DialogFragment {
         fileName = (TextView) view.findViewById(R.id.text_FileName);
         fileType = (TextView) view.findViewById(R.id.text_FileType);
         sender = (TextView) view.findViewById(R.id.text_Sender);
+        sender.setText(equipment.getName());
         sendIp = (TextView) view.findViewById(R.id.text_SendIP);
+        sendIp.setText(equipment.getAddress());
         sendTime = (TextView) view.findViewById(R.id.text_SendTime);
+        sendTime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(transmission.getTime())));
         catalogue = (TextView) view.findViewById(R.id.text_Catalogue);
+        fileName.setText(transmission.getFileName());
+
+        switch (transmission.getType()) {
+            case TRANSMISSION_FILE:
+                fileType.setText("文件");
+                catalogue.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("setting_transmission_file", Environment.getExternalStorageDirectory().getAbsolutePath()));
+            case TRANSMISSION_IMAGE:
+                fileType.setText("图片");
+                catalogue.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("setting_transmission_image", Environment.getExternalStorageDirectory().getAbsolutePath()));
+
+            case TRANSMISSION_VIDEO:
+                fileType.setText("视频");
+                catalogue.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("setting_transmission_video", Environment.getExternalStorageDirectory().getAbsolutePath()));
+
+            case TRANSMISSION_TEXT:
+                fileType.setText("文本");
+        }
+
+
+        catalogue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.setClass(getActivity(), FileBrowserActivity.class);
+                intent.putExtra("mode",FileBrowserActivity.SELECT_DIRECTORY);
+                intent.putExtra("path",catalogue.getText());
+                FileBrowserActivity.onFileBrowserResultListener=new OnFileBrowserResultListener() {
+                    @Override
+                    public void selectFile(File file) {
+                        catalogue.setText(file.getAbsolutePath());
+                    }
+
+                    @Override
+                    public void nothing() {
+
+                    }
+                };
+                startActivity(intent);
+            }
+        });
+
         builder.setPositiveButton("确认传输", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -61,31 +122,7 @@ public class TransConfirmDialogFragment extends DialogFragment {
         });
         return builder.create();
     }
-
-    public void show(Transmission transmission, Equipment equipment, FragmentManager manager) {
-        this.transmission = transmission;
-        this.equipment = equipment;
-        fileName.setText(transmission.getFileName());
-        switch (transmission.getType()) {
-            case TRANSMISSION_FILE:
-                fileType.setText("文件");
-            case TRANSMISSION_IMAGE:
-                fileType.setText("图片");
-            case TRANSMISSION_VIDEO:
-                fileType.setText("视频");
-            case TRANSMISSION_TEXT:
-                fileType.setText("文本");
-        }
-        sender.setText(equipment.getName());
-        sendIp.setText(transmission.getSendPath());
-        sendTime.setText(String.valueOf(transmission.getTime()));
-        super.show(manager, "TransConfirmDialogFragment");
-    }
 }
-    /**
-     * 调用显示ConfirmDialog
-     * TransConfirmDialogFragment confirmDialogFragment=new TransConfirmDialogFragment();
-     * confirmDialogFragment.show(transmission,equipment,getFragmentManager());
-     */
+
 
 

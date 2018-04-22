@@ -2,23 +2,17 @@ package cn.silen_dev.lantransmission;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -41,7 +35,7 @@ import cn.silen_dev.lantransmission.core.transmission.Server.LanServer;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
 import cn.silen_dev.lantransmission.dialog.InputWordDialog;
 import cn.silen_dev.lantransmission.dialog.LinkDialog;
-import cn.silen_dev.lantransmission.dialog.NotificationCome;
+import cn.silen_dev.lantransmission.dialog.TransConfirmDialogFragment;
 import cn.silen_dev.lantransmission.fileBrowser.FileBrowserActivity;
 import cn.silen_dev.lantransmission.fileBrowser.OnFileBrowserResultListener;
 import cn.silen_dev.lantransmission.fileBrowser.Utils;
@@ -51,10 +45,9 @@ import cn.silen_dev.lantransmission.settings.SettingActivity;
 import cn.silen_dev.lantransmission.transhistory.TransInfoActivity;
 import cn.silen_dev.lantransmission.widget.RandomTextView.RandomTextView;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int IMAGE = 1;
-    private static final int VIDEO =2;
+    private static final int VIDEO = 2;
 
     RandomTextView randomTextView;
     InputWordDialog inputWordDialog;
@@ -161,8 +154,7 @@ public class MainActivity extends AppCompatActivity
                 case R.id.fab_item_image:
                     Intent intent = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(intent, VIDEO);
-
+                    startActivityForResult(intent, VIDEO);
 
                     break;
                 case R.id.fab_item_file:
@@ -170,21 +162,7 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void selectFile(File file) {
                             Toast.makeText(MainActivity.this, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                            Transmission transmission=new Transmission();
-                            transmission.setSendPath(file.getAbsolutePath());
-                            transmission.setFileName(file.getName());
-                            transmission.setMessage(transmission.getFileName());
-                            transmission.setType(ConstValue.TRANSMISSION_FILE);
-                            try {
-                                transmission.setLength(Utils.getFileSize(file));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            transmission.setSr(ConstValue.SEND);
-                            Intent intent=new Intent();
-                            intent.setClass(MainActivity.this, SelectConnectionActivity.class);
-                            intent.putExtra("Transmission",transmission);
-                            startActivity(intent);
+                            transmissionFile(ConstValue.TRANSMISSION_FILE, file);
 
                         }
 
@@ -199,6 +177,26 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
+
+    }
+
+
+    private void transmissionFile(int type, File file) {
+        Transmission transmission = new Transmission();
+        transmission.setSendPath(file.getAbsolutePath());
+        transmission.setFileName(file.getName());
+        transmission.setMessage(transmission.getFileName());
+        transmission.setType(type);
+        try {
+            transmission.setLength(Utils.getFileSize(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        transmission.setSr(ConstValue.SEND);
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, SelectConnectionActivity.class);
+        intent.putExtra("Transmission", transmission);
+        startActivity(intent);
     }
 
     //剪切板内容
@@ -206,7 +204,7 @@ public class MainActivity extends AppCompatActivity
     static String tempStr;
 
     public String GetClipBoardContent() {
-        runOnUiThread( new Runnable() {
+        runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
@@ -236,7 +234,10 @@ public class MainActivity extends AppCompatActivity
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String imagePath = c.getString(columnIndex);
-            Toast.makeText(getApplicationContext(),imagePath,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_SHORT).show();
+
+            transmissionFile(ConstValue.TRANSMISSION_IMAGE, new File(imagePath));
+
             c.close();
         }
         if (requestCode == VIDEO && resultCode == Activity.RESULT_OK && data != null) {
@@ -246,12 +247,11 @@ public class MainActivity extends AppCompatActivity
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String videoPath = c.getString(columnIndex);
-            Toast.makeText(getApplicationContext(),videoPath,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), videoPath, Toast.LENGTH_SHORT).show();
+            transmissionFile(ConstValue.TRANSMISSION_VIDEO, new File(videoPath));
             c.close();
         }
     }
-
-
 
 
     @Override
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.action_scan_qrcode:
-                LinkDialog linkDialog = new LinkDialog();
+                LinkDialog linkDialog = new LinkDialog(myApplication.getMyEquipmentInfo(), myApplication);
                 linkDialog.show(getSupportFragmentManager(), null);
                 break;
             case R.id.action_transmission_manager:

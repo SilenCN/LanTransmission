@@ -111,6 +111,7 @@ public class FileBrowserActivity extends AppCompatActivity {
 
 
     private void updateFileList(File file) {
+        System.out.println(file.getAbsolutePath());
         data.clear();
         selectFile = file;
         if (checkIsRootFile(file)) {
@@ -136,7 +137,9 @@ public class FileBrowserActivity extends AppCompatActivity {
             data.add(parentMap);
 
             File[] subFiles = file.listFiles();
-            Arrays.sort(subFiles, new FileSortComparator());
+            if (subFiles.length>1) {
+                Arrays.sort(subFiles, new FileSortComparator());
+            }
             for (File subFile : subFiles) {
                 if (mode == SELECT_DIRECTORY && subFile.isFile()) {
                     break;
