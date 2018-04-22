@@ -67,17 +67,18 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
     @Override
     public void onBindViewHolder(@NonNull WordList_Adapter.ViewHolder holder, int position) {
         Transmission transmission=wordList.get(position);
-        holder.trans_word.setText((transmission.getFileName()).toString());
+        holder.trans_word.setText(transmission.getMessage());
         holder.trans_word_user.setText(String.valueOf(transmission.getUserId()));
         switch (transmission.getSr()){
-            case 0:
+            case SEND:
                 holder.load.setImageResource(R.mipmap.upload);
                 break;
-            case 1:
+            case RECEIVE:
                 holder.load.setImageResource(R.mipmap.dowload);
                 break;
+            default:
+                break;
         }
-
     }
 
     @Override

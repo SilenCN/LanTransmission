@@ -5,13 +5,6 @@ import java.io.Serializable;
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 
 public class Equipment implements Serializable{
-    //类型
-    public static final int TYPE_PHONE=0;    //手机
-    public static final int TYPE_COMPUTER=1;    //电脑
-    //状态
-    public static final int STATUS_ONLINE=0; //在线
-    public static final int STATUS_OFFLINE=1;//离线
-
     private int id;
     private String name;     //设备名称
     private String address; //设备IP地址

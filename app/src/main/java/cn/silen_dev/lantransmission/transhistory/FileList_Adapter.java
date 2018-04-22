@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import cn.silen_dev.lantransmission.R;
+import cn.silen_dev.lantransmission.SQLite.TransOperators;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
 import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 
@@ -37,6 +38,15 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
     private static final String TAG = "FileList_Adapter";
     private Context context;
     private List<Transmission> filesList;
+    private OnItemClickListener onItemClickListener;
+
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+    public FileList_Adapter(List<Transmission> mfilesList) {
+        filesList = mfilesList;
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -58,15 +68,12 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
         }
     }
 
-    public FileList_Adapter(List<Transmission> mfilesList) {
-        filesList = mfilesList;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (context == null) {
             context = parent.getContext();
         }
+
         View view = LayoutInflater.from(context).inflate(R.layout.activity_trans_item,
                 parent, false);
         return new ViewHolder(view);
@@ -74,8 +81,16 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Transmission transmission = filesList.get(position);
-        holder.fileName.setText((transmission.getFileName()).toString());
+        final Transmission transmission = filesList.get(position);
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) { //recycler的item相应单击事件
+//                if (null!=onItemClickListener){
+//                    onItemClickListener.onClick(transmission);
+//                }
+//            }
+//        });
+        holder.fileName.setText(transmission.getFileName());
         holder.fileUser.setText(String.valueOf(transmission.getUserId()));
         switch (transmission.getStatus()) {
             case STATUS_DONE:
@@ -87,13 +102,15 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
             case STATUS_NONE:
                 holder.fileStatus.setText("未完成");
                 break;
+            default:
+                break;
         }
         switch (transmission.getSr()) {
             case SEND:
                 holder.fileLoad.setImageResource(R.mipmap.upload);
                 break;
             case RECEIVE:
-                holder.fileLoad.setImageResource(R.mipmap.dowload);
+                holder.fileLoad.setImageResource(R.drawable.dowload);
                 break;
             default:
                 break;
@@ -123,12 +140,19 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
                 }
                 holder.image.setImageBitmap(bmp);
                 break;
+            default:
+                break;
         }
     }
+
 
     @Override
     public int getItemCount() {
         return filesList.size();
+    }
+
+    public interface OnItemClickListener{
+        void onClick(Transmission transmission);
     }
 
 }

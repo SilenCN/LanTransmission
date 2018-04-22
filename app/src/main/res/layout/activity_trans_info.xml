@@ -30,12 +30,6 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/rb_all"
-            style="@style/tab_menu_item"
-            android:text="全部"
-            android:textColor="@drawable/tab_menu_text" />
-
-        <RadioButton
             android:id="@+id/rb_pic"
             style="@style/tab_menu_item"
             android:text="图片"
