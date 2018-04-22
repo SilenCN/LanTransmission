@@ -11,6 +11,8 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.logging.Handler;
 
+import cn.silen_dev.lantransmission.MyApplication;
+
 public class ScannerServer extends Thread {
     private static final int SCANNER_SERVER_PORT = 2333;
     private static final int PACKET_LENGTH = 1024;
@@ -40,12 +42,12 @@ public class ScannerServer extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
     public void scan(){
         System.out.println("scan");
-        InetSocketAddress inetAddress=new InetSocketAddress("192.168.43.255",SCANNER_SERVER_PORT);
+        System.out.println(MyApplication.BRODCAST_ADDRESS);
+        InetSocketAddress inetAddress=new InetSocketAddress(MyApplication.BRODCAST_ADDRESS,SCANNER_SERVER_PORT);
         send(inetAddress,ConstValue.HELLO+":"+uId);
     }
 

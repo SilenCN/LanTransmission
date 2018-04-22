@@ -170,7 +170,7 @@ public class ClientLinkThread extends Thread {
 
                         new NotificationUtils(myApplication.getApplicationContext()).sendNotification("传输完成", file.getName());
 
-
+                        transOperators.updateStatus(tcpMessage.getTransmission().getId(),ConstValue.STATUS_DONE);
 
                     } else {
 
@@ -236,8 +236,9 @@ public class ClientLinkThread extends Thread {
         Intent intent = new Intent();
         intent.putExtra("transmission", tcpMessage.getTransmission());
         intent.putExtra("equipment", tcpMessage.getEquipment());
-        intent.setClass(myApplication.getApplicationContext(), ConfirmDialogActivity.class);
-        myApplication.getApplicationContext().startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setClass(myApplication.getBaseContext(), ConfirmDialogActivity.class);
+        myApplication.getBaseContext().startActivity(intent);
 
     }
 
