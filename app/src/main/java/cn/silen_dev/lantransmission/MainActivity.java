@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -40,6 +42,7 @@ import cn.silen_dev.lantransmission.fileBrowser.FileBrowserActivity;
 import cn.silen_dev.lantransmission.fileBrowser.OnFileBrowserResultListener;
 import cn.silen_dev.lantransmission.fileBrowser.Utils;
 import cn.silen_dev.lantransmission.model.Equipment;
+import cn.silen_dev.lantransmission.model.GetBroadCast;
 import cn.silen_dev.lantransmission.selectconn.SelectConnectionActivity;
 import cn.silen_dev.lantransmission.settings.SettingActivity;
 import cn.silen_dev.lantransmission.transhistory.TransInfoActivity;
@@ -60,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MyApplication.BRODCAST_ADDRESS=new GetBroadCast().getBroadcastAddress(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -119,7 +125,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }, 300);
 
-    /*    startActivity(new Intent(MainActivity.this,ConfirmDialogActivity.class));*/
     }
 
 
@@ -150,12 +155,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.fab_item_video:
                     Intent intent2 = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent2, IMAGE);
+                    startActivityForResult(intent2, VIDEO);
                     break;
                 case R.id.fab_item_image:
                     Intent intent = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, VIDEO);
+                    startActivityForResult(intent, IMAGE);
 
                     break;
                 case R.id.fab_item_file:

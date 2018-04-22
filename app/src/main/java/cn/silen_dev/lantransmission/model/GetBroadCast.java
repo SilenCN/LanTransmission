@@ -14,34 +14,42 @@ public class GetBroadCast {
     DhcpInfo dhcpInfo;
 
 
-    public GetBroadCast(){}
-    public String getIP(Context context){
-        WifiManager my_wifiManager=((WifiManager) context.getSystemService(Context.WIFI_SERVICE));
-        wifiInfo=my_wifiManager.getConnectionInfo();
-        dhcpInfo=my_wifiManager.getDhcpInfo();
+    public GetBroadCast() {
+    }
+
+    public String getIP(Context context) {
+        WifiManager my_wifiManager = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE));
+        wifiInfo = my_wifiManager.getConnectionInfo();
+        dhcpInfo = my_wifiManager.getDhcpInfo();
         return intToIp(dhcpInfo.ipAddress);
 
     }
-    public String getNetmask(Context context){
-        WifiManager my_wifiManager=((WifiManager) context.getSystemService(Context.WIFI_SERVICE));
-        wifiInfo=my_wifiManager.getConnectionInfo();
-        dhcpInfo=my_wifiManager.getDhcpInfo();
+
+    public String getNetmask(Context context) {
+        WifiManager my_wifiManager = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE));
+        wifiInfo = my_wifiManager.getConnectionInfo();
+        dhcpInfo = my_wifiManager.getDhcpInfo();
         return intToIp(dhcpInfo.netmask);
     }
+
     private String intToIp(int paramInt) {
-                return (paramInt & 0xFF) + "." + (0xFF & paramInt >> 8) + "." + (0xFF & paramInt >> 16) + "."
-                        + (0xFF & paramInt >> 24);
-            }
+        return (paramInt & 0xFF) + "." + (0xFF & paramInt >> 8) + "." + (0xFF & paramInt >> 16) + "."
+                + (0xFF & paramInt >> 24);
+    }
+
+    public String getBroadcastAddress(Context context) {
+        return getBroadcastAddress(getIP(context), getNetmask(context));
+    }
 
 
-    public String getBroadcastAddress(String ip,String netmask) {
+    public String getBroadcastAddress(String ip, String netmask) {
         String[] ips = ip.split("\\.");
         String[] masks = netmask.split("\\.");
         StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < ips.length; i++) {
-            ips[i] = String.valueOf((~Integer.parseInt(masks [i]))|(Integer.parseInt(ips[i])));
+        for (int i = 0; i < ips.length; i++) {
+            ips[i] = String.valueOf((~Integer.parseInt(masks[i])) | (Integer.parseInt(ips[i])));
             sb.append(turnToStr(Integer.parseInt(ips[i])));
-            if(i != (ips.length-1))
+            if (i != (ips.length - 1))
                 sb.append(".");
         }
         return turnToIp(sb.toString());
@@ -50,6 +58,7 @@ public class GetBroadCast {
 
     /**
      * 把带符号整形转换为二进制
+     *
      * @param num
      * @return
      */
@@ -70,10 +79,11 @@ public class GetBroadCast {
 
     /**
      * 把二进制形式的ip，转换为十进制形式的ip
+     *
      * @param str
      * @return
      */
-    private String turnToIp(String str){
+    private String turnToIp(String str) {
         String[] ips = str.split("\\.");
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < ips.length; i++) {
@@ -86,10 +96,11 @@ public class GetBroadCast {
 
     /**
      * 把二进制转换为十进制
+     *
      * @param str
      * @return
      */
-    private int turnToInt(String str){
+    private int turnToInt(String str) {
         int total = 0;
         int top = str.length();
         for (int i = 0; i < str.length(); i++) {
