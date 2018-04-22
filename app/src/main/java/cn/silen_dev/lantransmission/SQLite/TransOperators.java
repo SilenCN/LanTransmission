@@ -129,8 +129,9 @@ public class TransOperators implements TransService{
                     }while(cursor.moveToNext());
                 }
                 return transList;
+            default:
+                return transList;
         }
-        return transList;
     }
 
     @Override

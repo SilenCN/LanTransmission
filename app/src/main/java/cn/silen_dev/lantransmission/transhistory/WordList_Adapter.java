@@ -23,7 +23,6 @@ import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
 /**
  * Created by admin on 2018/4/20.
  */
-
 public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.ViewHolder> {
     private Context context;
     private List<Transmission> wordList;
@@ -67,17 +66,18 @@ public class WordList_Adapter extends RecyclerView.Adapter<WordList_Adapter.View
     @Override
     public void onBindViewHolder(@NonNull WordList_Adapter.ViewHolder holder, int position) {
         Transmission transmission=wordList.get(position);
-        holder.trans_word.setText((transmission.getFileName()).toString());
+        holder.trans_word.setText(transmission.getMessage());
         holder.trans_word_user.setText(String.valueOf(transmission.getUserId()));
         switch (transmission.getSr()){
-            case 0:
+            case SEND:
                 holder.load.setImageResource(R.mipmap.upload);
                 break;
-            case 1:
+            case RECEIVE:
                 holder.load.setImageResource(R.mipmap.dowload);
                 break;
+            default:
+                break;
         }
-
     }
 
     @Override

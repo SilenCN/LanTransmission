@@ -1,16 +1,21 @@
 
 package cn.silen_dev.lantransmission.transhistory;
 
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import android.widget.Toolbar;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,21 +23,24 @@ import java.util.List;
 import java.util.Random;
 
 import cn.silen_dev.lantransmission.R;
+import cn.silen_dev.lantransmission.SQLite.EquipOperators;
+import cn.silen_dev.lantransmission.SQLite.TransOperators;
+import cn.silen_dev.lantransmission.core.transmission.Client.LanClient;
+import cn.silen_dev.lantransmission.core.transmission.ConstValue;
 import cn.silen_dev.lantransmission.core.transmission.Transmission;
+import cn.silen_dev.lantransmission.dialog.TextDialog;
 import cn.silen_dev.lantransmission.model.Equipment;
 import cn.silen_dev.lantransmission.selectconn.EquipmentAdapter;
+//import cn.silen_dev.lantransmission.transhistory.WordList_Adapter.OnItemClickListener;
 
 
 public class TransInfoActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
 
-    private List<Transmission> transList_all = new ArrayList<>();
     private List<Transmission> transList_pic = new ArrayList<>();
     private List<Transmission> transList_vedio = new ArrayList<>();
     private List<Transmission> transList_word = new ArrayList<>();
     private List<Transmission> transList_file = new ArrayList<>();
     private List<Equipment> transList_device = new ArrayList<>();
-
-    private List<Transmission> transList = new ArrayList<>();
 
     private Toolbar toolbar;
 
@@ -40,36 +48,20 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
     private WordList_Adapter wAdapter;
     private EquipmentAdapter eAdapter;
 
-    //    private GridLayoutManager layoutManager;
+private static final String TAG = "TransInfoActivity";
+
     private LinearLayoutManager layoutManager;
     private RecyclerView recyclerView;
     private RadioGroup rg_tab_bar;
-    private RadioButton rb_all;
     private RadioButton rb_pic;
     private RadioButton rb_vedio;
     private RadioButton rb_file;
+    private RadioButton rb_word;
     private RadioButton rb_device;
 
-    private Transmission[] files_1 = {
-            new Transmission("000000000", 0, 0),
-            new Transmission("111111111", 1, 1),
-            new Transmission("222222222", 2, 2),
-            new Transmission("333333333", 3, 3),
-            new Transmission("444444444", 3, 3),
-            new Transmission("555555555", 3, 3),
-    };
-    private Transmission[] files = {
-            new Transmission("IMG_20180421_194947_1.jpg", 0, 0, "/storage/emulated/0/DCIM/Camera/IMG_20180421_194947_1.jpg", 1, 0),
-            new Transmission("VID_20170331_115719.mp4", 1, 1, "/storage/emulated/0/DCIM/Camera/VID_20170331_115719.mp4", 2, 0),
-            new Transmission("IMG_20180327_161618.jpg", 2, 2, "/storage/emulated/0/DCIM/CameraIMG_20180327_161618.jpg/", 1, 1)
-    };
-    private Equipment[] device = {
-            new Equipment("Nokia6", "10.168.132.248", 0, 0, 1),
-            new Equipment("MI6", "192.168.132.208", 0, 1, 1),
-            new Equipment("联想", "192.168.132.248", 1, 1, 1)
-    };
+    private TransOperators transOperators;
+    private EquipOperators equipOperators;
 
-    //    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,26 +70,29 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
 
         rg_tab_bar = (RadioGroup) findViewById(R.id.rg_tab_bar);
         rg_tab_bar.setOnCheckedChangeListener(this);
-        //获取第一个单选按钮
-        rb_all = (RadioButton) findViewById(R.id.rb_all);
-        rb_all.setChecked(true);
+
         rb_pic = (RadioButton) findViewById(R.id.rb_pic);
+        rb_pic.setChecked(true);
         rb_vedio = (RadioButton) findViewById(R.id.rb_vedio);
         rb_file = (RadioButton) findViewById(R.id.rb_file);
-        rb_device = (RadioButton) findViewById(R.id.rb_word);
+        rb_word=(RadioButton)findViewById(R.id.rb_word);
+        rb_device = (RadioButton) findViewById(R.id.rb_device);
 
-        //初始化传输记录数据
-//        init_all(new ArrayList<Transmission>(Arrays.asList(files)));
-//        init_pic(new ArrayList<Transmission>(Arrays.asList(files)));
-//        init_vedio(new ArrayList<Transmission>(Arrays.asList(files)));
-//        init_file(new ArrayList<Transmission>(Arrays.asList(files)));
-//        init_device(new ArrayList<Equipment>(Arrays.asList(device)));
-        init_all();
-        init_pic();
-        init_vedio();
-        init_file();
-        init_word();
-        init_device();
+        transOperators=new TransOperators(this);
+        equipOperators=new EquipOperators(this);
+
+        transList_word=transOperators.getAllTrans(ConstValue.TRANSMISSION_TEXT);
+        transList_pic=transOperators.getAllTrans(ConstValue.TRANSMISSION_IMAGE);
+        transList_device=equipOperators.getAllEquipment();
+        transList_file=transOperators.getAllTrans(ConstValue.TRANSMISSION_FILE);
+        transList_vedio=transOperators.getAllTrans(ConstValue.TRANSMISSION_VIDEO);
+
+
+        for(Transmission transmission:transOperators.getAllTrans()){
+            System.out.println(new Gson().toJson(transmission));
+        }
+//        Log.d(TAG, transList_word.get(0).getMessage());
+//        Log.d(TAG, String.valueOf(transList_word.get(0).getUserId()));
     }
 
     //为每个button设置点击监听事件
@@ -107,145 +102,48 @@ public class TransInfoActivity extends AppCompatActivity implements RadioGroup.O
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(layoutManager);
         switch (checkedId) {
-            case R.id.rb_all:
-//                init_all(transList);
-                tAdapter = new FileList_Adapter(transList_all);
-                recyclerView.setAdapter(tAdapter);
-//                init_all(new ArrayList<Transmission>(Arrays.asList(files)));
-                break;
             case R.id.rb_pic:
-//                init_pic();
-                tAdapter = new FileList_Adapter(transList_pic);
-                recyclerView.setAdapter(tAdapter);
+                init_pic(transList_pic);
                 break;
             case R.id.rb_vedio:
-                tAdapter = new FileList_Adapter(transList_vedio);
-                recyclerView.setAdapter(tAdapter);
+                init_vedio(transList_vedio);
                 break;
             case R.id.rb_file:
-                tAdapter = new FileList_Adapter(transList_file);
-                recyclerView.setAdapter(tAdapter);
+                init_file(transList_file);
                 break;
             case R.id.rb_word:
-//                init_file(new ArrayList<Transmission>(Arrays.asList(files)));
-                wAdapter = new WordList_Adapter(transList_word);
-                recyclerView.setAdapter(wAdapter);
+                init_word(transList_word);
                 break;
             case R.id.rb_device:
-//                init_device(new ArrayList<Equipment>(Arrays.asList(device)));
-                eAdapter = new EquipmentAdapter(transList_device);
-                recyclerView.setAdapter(eAdapter);
+                init_device(transList_device);
+                break;
+            default:
                 break;
         }
-    }
-
-    public void init_all(List<Transmission> transList_all) {
-        tAdapter = new FileList_Adapter(transList_all);
-        recyclerView.setAdapter(tAdapter);
-//        transList_all.clear();
-//        int len=transList_all.size();
-//        for(int i=0;i<len;i++)
-//            transList_all.add(files[i]);
     }
 
     public void init_pic(List<Transmission> transList_pic) {
         tAdapter = new FileList_Adapter(transList_pic);
         recyclerView.setAdapter(tAdapter);
-//        transList_pic.clear();
-//        for(int i=0;i<20;i++){
-//            Random random = new Random();
-//            int index=random.nextInt(files.length);
-//            transList_pic.add(files[index]);
-//        }
     }
 
     public void init_vedio(List<Transmission> transList_vedio) {
         tAdapter = new FileList_Adapter(transList_vedio);
         recyclerView.setAdapter(tAdapter);
-//        transList_vedio.clear();
-//        for(int i=0;i<20;i++){
-//            Random random = new Random();
-//            int index=random.nextInt(files.length);
-//            transList_vedio.add(files[index]);
-//        }
     }
 
     public void init_file(List<Transmission> transList_file) {
         wAdapter = new WordList_Adapter(transList_file);
         recyclerView.setAdapter(wAdapter);
-//        transList_file.clear();
-//        for(int i=0;i<20;i++){
-//            Random random = new Random();
-//            int index=random.nextInt(files.length);
-//            transList_file.add(files[index]);
-//        }
     }
 
+    public void init_word(List<Transmission> transList_word) {
+        wAdapter = new WordList_Adapter(transList_word);
+        recyclerView.setAdapter(wAdapter);
+    }
     public void init_device(List<Equipment> transList_device) {
         eAdapter = new EquipmentAdapter(transList_device);
         recyclerView.setAdapter(eAdapter);
-//        transList_device.clear();
-//        for(int i=0;i<20;i++){
-//            Random random = new Random();
-//            int index=random.nextInt(device.length);
-//            transList_device.add(device[index]);
-//        }
-    }
-
-
-    public void init_all() {
-        transList_all.clear();
-        for (int i = 0; i < 20; i++) {
-            Random random = new Random();
-            int index = random.nextInt(files.length);
-            transList_all.add(files[index]);
-        }
-    }
-
-    public void init_pic() {
-        transList_pic.clear();
-        for (int i = 0; i < 20; i++) {
-            Random random = new Random();
-            int index = random.nextInt(files.length);
-            transList_pic.add(files[index]);
-        }
-    }
-
-    public void init_vedio() {
-        transList_vedio.clear();
-        for (int i = 0; i < 20; i++) {
-            Random random = new Random();
-            int index = random.nextInt(files.length);
-            transList_vedio.add(files[index]);
-        }
-    }
-
-    public void init_file() {
-        transList_file.clear();
-        for (int i = 0; i < 20; i++) {
-
-            Random random = new Random();
-            int index = random.nextInt(files.length);
-            transList_file.add(files[index]);
-        }
-    }
-
-    public void init_word() {
-        transList_word.clear();
-        for (int i = 0; i < 20; i++) {
-            Random random = new Random();
-            int index = random.nextInt(files.length);
-            transList_word.add(files[index]);
-        }
-    }
-
-    public void init_device() {
-        transList_device.clear();
-        for (int i = 0; i < 20; i++) {
-            Random random = new Random();
-            int index = random.nextInt(device.length);
-            transList_device.add(device[index]);
-        }
     }
 
     public void setToolbar() {

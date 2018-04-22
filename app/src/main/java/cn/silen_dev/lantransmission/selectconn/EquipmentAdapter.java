@@ -15,6 +15,9 @@ import java.util.List;
 import cn.silen_dev.lantransmission.R;
 import cn.silen_dev.lantransmission.model.Equipment;
 
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.RECEIVE;
+import static cn.silen_dev.lantransmission.core.transmission.ConstValue.SEND;
+
 /**
  * Created by 杨志坤 on 2018/4/19.
  */
@@ -73,10 +76,10 @@ public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.View
         holder.equipmentAddress.setText(equipment.getAddress());
         holder.equipmentType.setText(String.valueOf(equipment.getType()));
         switch (equipment.getType()){
-            case 0:
+            case SEND:
                 holder.icon.setImageResource(R.mipmap.phone);
                 break;
-            case 1:
+            case RECEIVE:
                 holder.icon.setImageResource(R.mipmap.computer);
                 break;
         }
