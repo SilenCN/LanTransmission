@@ -32,11 +32,10 @@ public class Transmission implements Serializable {
         this.sr=sr;
     }
 
-    public Transmission(String fileName,int userId,int status)
-    {
-        this.fileName=fileName;
-        this.status=status;
-        this.userId=userId;
+    public Transmission(String fileName, int userId, int status) {
+        this.fileName = fileName;
+        this.status = status;
+        this.userId = userId;
     }
     public Transmission(String fileName,int userId,int status,String savePath,int type,int sr)
     {
@@ -127,7 +126,8 @@ public class Transmission implements Serializable {
         return sr;
     }
 
-    public void setSr(int sr) {this.sr = sr;
+    public void setSr(int sr) {
+        this.sr = sr;
     }
 
     public int getId() {

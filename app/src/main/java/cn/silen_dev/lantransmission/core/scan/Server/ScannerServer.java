@@ -45,7 +45,7 @@ public class ScannerServer extends Thread {
     }
     public void scan(){
         System.out.println("scan");
-        InetSocketAddress inetAddress=new InetSocketAddress("255.255.255.255",SCANNER_SERVER_PORT);
+        InetSocketAddress inetAddress=new InetSocketAddress("192.168.43.255",SCANNER_SERVER_PORT);
         send(inetAddress,ConstValue.HELLO+":"+uId);
     }
 

@@ -93,6 +93,7 @@ public class SettingFragment extends PreferenceFragment {
 
     private void mkdirForStore(File file){
         if (!file.exists()){
+            mkdirForStore(file.getParentFile());
             file.mkdir();
         }
     }

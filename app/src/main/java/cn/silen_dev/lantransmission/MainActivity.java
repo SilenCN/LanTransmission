@@ -163,28 +163,13 @@ public class MainActivity extends AppCompatActivity
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                             startActivityForResult(intent, VIDEO);
 
-
                     break;
                 case R.id.fab_item_file:
                     OnFileBrowserResultListener onFileBrowserResultListener = new OnFileBrowserResultListener() {
                         @Override
                         public void selectFile(File file) {
                             Toast.makeText(MainActivity.this, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                            Transmission transmission=new Transmission();
-                            transmission.setSendPath(file.getAbsolutePath());
-                            transmission.setFileName(file.getName());
-                            transmission.setMessage(transmission.getFileName());
-                            transmission.setType(ConstValue.TRANSMISSION_FILE);
-                            try {
-                                transmission.setLength(Utils.getFileSize(file));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            transmission.setSr(ConstValue.SEND);
-                            Intent intent=new Intent();
-                            intent.setClass(MainActivity.this, SelectConnectionActivity.class);
-                            intent.putExtra("Transmission",transmission);
-                            startActivity(intent);
+                            transmissionFile(ConstValue.TRANSMISSION_FILE,file);
 
                         }
 
@@ -199,6 +184,25 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
+    }
+
+
+    private void transmissionFile(int type,File file){
+        Transmission transmission=new Transmission();
+        transmission.setSendPath(file.getAbsolutePath());
+        transmission.setFileName(file.getName());
+        transmission.setMessage(transmission.getFileName());
+        transmission.setType(type);
+        try {
+            transmission.setLength(Utils.getFileSize(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        transmission.setSr(ConstValue.SEND);
+        Intent intent=new Intent();
+        intent.setClass(MainActivity.this, SelectConnectionActivity.class);
+        intent.putExtra("Transmission",transmission);
+        startActivity(intent);
     }
 
     //剪切板内容
@@ -237,6 +241,9 @@ public class MainActivity extends AppCompatActivity
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String imagePath = c.getString(columnIndex);
             Toast.makeText(getApplicationContext(),imagePath,Toast.LENGTH_SHORT).show();
+
+            transmissionFile(ConstValue.TRANSMISSION_IMAGE,new File(imagePath));
+
             c.close();
         }
         if (requestCode == VIDEO && resultCode == Activity.RESULT_OK && data != null) {
@@ -247,6 +254,7 @@ public class MainActivity extends AppCompatActivity
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String videoPath = c.getString(columnIndex);
             Toast.makeText(getApplicationContext(),videoPath,Toast.LENGTH_SHORT).show();
+            transmissionFile(ConstValue.TRANSMISSION_VIDEO,new File(videoPath));
             c.close();
         }
     }
@@ -279,7 +287,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.action_scan_qrcode:
-                LinkDialog linkDialog = new LinkDialog();
+                LinkDialog linkDialog = new LinkDialog(myApplication.getMyEquipmentInfo(),myApplication);
                 linkDialog.show(getSupportFragmentManager(), null);
                 break;
             case R.id.action_transmission_manager:

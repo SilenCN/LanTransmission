@@ -71,8 +71,8 @@ public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.View
         Equipment equipment = equipmentList.get(position);
         holder.equipmentName.setText(equipment.getName());
         holder.equipmentAddress.setText(equipment.getAddress());
-        holder.equipmentType.setText(String.valueOf(equipment.getId()));
-        switch (equipment.getId()){
+        holder.equipmentType.setText(String.valueOf(equipment.getType()));
+        switch (equipment.getType()){
             case 0:
                 holder.icon.setImageResource(R.drawable.phone);
                 break;
