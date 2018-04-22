@@ -1,5 +1,6 @@
 package cn.silen_dev.lantransmission.SQLite;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -38,15 +39,19 @@ public class TransOperators implements TransService{
         db.execSQL(insert);//返回值为void
     }
 
-    public int insertTransWithReturnId(Transmission e){
-        insertTrans(e);
-        String sql = "select last_insert_rowid() from Equipment" ;
-        Cursor cursor = db.rawQuery(sql, null);
-        int a = -1;
-        if(cursor.moveToFirst()){
-            a = cursor.getInt(0);
-        }
-        return a;
+    public long insertTransWithReturnId(Transmission t){
+
+        ContentValues contentValue=new ContentValues();
+        contentValue.put("name",t.getFileName());
+        contentValue.put("type",t.getType());
+        contentValue.put("message",t.getMessage());
+        contentValue.put("length",t.getLength());
+        contentValue.put("userId",t.getUserId());
+        contentValue.put("savePath",t.getSavePath());
+        contentValue.put("sendPath",t.getSendPath());
+        contentValue.put("status",t.getStatus());
+        contentValue.put("sr",t.getSr());
+        return db.insert("Transmission", null, contentValue);
     }
 
     @Override

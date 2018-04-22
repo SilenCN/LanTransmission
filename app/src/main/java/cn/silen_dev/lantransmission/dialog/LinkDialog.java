@@ -35,8 +35,6 @@ public class LinkDialog extends DialogFragment {
         View view= LayoutInflater.from(getActivity()).inflate(R.layout.link_dialog,null);
         //显示本机的信息
 
-
-
         ((TextView)view.findViewById(R.id.ipaddressinfo)).setText(equipment.getAddress());
         ((TextView)view.findViewById(R.id.webinfo)).setText("http://"+equipment.getAddress()+":"+equipment.getPort()+"/web");
 

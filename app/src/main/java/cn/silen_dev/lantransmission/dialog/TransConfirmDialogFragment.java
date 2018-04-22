@@ -1,8 +1,5 @@
 package cn.silen_dev.lantransmission.dialog;
 
-
-
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.io.File;
@@ -35,7 +33,7 @@ import static cn.silen_dev.lantransmission.core.transmission.ConstValue.TRANSMIS
  */
 
 public class TransConfirmDialogFragment extends DialogFragment {
-
+    private OnTransmissionConfirmResultListener onTransmissionConfirmResultListener;
     private Transmission transmission;
     private Equipment equipment;
     private TextView fileName;
@@ -49,6 +47,7 @@ public class TransConfirmDialogFragment extends DialogFragment {
         super();
         this.transmission=transmission;
         this.equipment=equipment;
+        this.setCancelable(false);
     }
 
     @Override
@@ -73,16 +72,18 @@ public class TransConfirmDialogFragment extends DialogFragment {
             case TRANSMISSION_FILE:
                 fileType.setText("文件");
                 catalogue.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("setting_transmission_file", Environment.getExternalStorageDirectory().getAbsolutePath()));
+                break;
             case TRANSMISSION_IMAGE:
                 fileType.setText("图片");
                 catalogue.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("setting_transmission_image", Environment.getExternalStorageDirectory().getAbsolutePath()));
-
+                break;
             case TRANSMISSION_VIDEO:
                 fileType.setText("视频");
                 catalogue.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("setting_transmission_video", Environment.getExternalStorageDirectory().getAbsolutePath()));
-
+                break;
             case TRANSMISSION_TEXT:
                 fileType.setText("文本");
+                break;
         }
 
 
@@ -111,16 +112,35 @@ public class TransConfirmDialogFragment extends DialogFragment {
         builder.setPositiveButton("确认传输", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (onTransmissionConfirmResultListener!=null){
+                    onTransmissionConfirmResultListener.send(catalogue.getText().toString());
 
+                }
+                getActivity().finish();
             }
         });
         builder.setNegativeButton("取消传输", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (null!=onTransmissionConfirmResultListener){
+                    onTransmissionConfirmResultListener.cancel();
 
+                }
+                getActivity().finish();
             }
         });
-        return builder.create();
+        Dialog dialog=builder.create();
+        dialog.getWindow().setType((WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY));
+        return dialog;
+    }
+
+    public void setOnTransmissionConfirmResultListener(OnTransmissionConfirmResultListener onTransmissionConfirmResultListener) {
+        this.onTransmissionConfirmResultListener = onTransmissionConfirmResultListener;
+    }
+
+    public interface OnTransmissionConfirmResultListener{
+        void send(String savePath);
+        void cancel();
     }
 }
 
