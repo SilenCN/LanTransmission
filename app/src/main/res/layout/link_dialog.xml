@@ -35,7 +35,6 @@
             android:id="@+id/ipaddressinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="127.0.0.1"
             tools:layout_editor_absoluteX="56dp"
             tools:layout_editor_absoluteY="259dp" />
@@ -62,7 +61,6 @@
             android:id="@+id/app_port_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="WWW.111111.com"
  />
 
@@ -87,7 +85,6 @@
             android:id="@+id/webinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="WWW.111111.com"
             tools:layout_editor_absoluteX="150dp"
             tools:layout_editor_absoluteY="297dp" />
