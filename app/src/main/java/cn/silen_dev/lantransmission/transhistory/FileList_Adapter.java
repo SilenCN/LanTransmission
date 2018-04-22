@@ -93,7 +93,7 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
                 holder.fileLoad.setImageResource(R.mipmap.upload);
                 break;
             case RECEIVE:
-                holder.fileLoad.setImageResource(R.drawable.dowload);
+                holder.fileLoad.setImageResource(R.mipmap.dowload);
                 break;
             default:
                 break;
@@ -126,12 +126,10 @@ public class FileList_Adapter extends RecyclerView.Adapter<FileList_Adapter.View
         }
     }
 
-
     @Override
     public int getItemCount() {
         return filesList.size();
     }
-
 
 }
 
